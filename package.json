@@ -1,8 +1,17 @@
 {
-  "name": "r6-bracket",
+  "name": "r6-esports-bracket",
   "version": "1.0.0",
+  "description": "Rainbow Six esports bracket with permanent Supabase JSONB storage.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.4",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
   }
 }

@@ -1,96 +1,110 @@
-const http = require("http");
-const fs = require("fs");
+const express = require("express");
 const path = require("path");
+const { supabase } = require("./supabase");
 
-const root = __dirname;
+const app = express();
+const host = "0.0.0.0";
 const port = Number(process.env.PORT || 4173);
-const statePath = path.join(root, "state.json");
+const rootDir = __dirname;
+const stateRowId = "main";
 
-const mimeTypes = {
-  ".avif": "image/avif",
-  ".css": "text/css; charset=utf-8",
-  ".html": "text/html; charset=utf-8",
-  ".js": "text/javascript; charset=utf-8",
-  ".json": "application/json; charset=utf-8",
-  ".png": "image/png",
-  ".svg": "image/svg+xml",
-  ".webp": "image/webp",
-};
+app.disable("x-powered-by");
+app.use(express.json({ limit: "2mb" }));
 
-function send(res, statusCode, body, headers = {}) {
-  res.writeHead(statusCode, headers);
-  res.end(body);
+function noStore(res) {
+  res.setHeader("Cache-Control", "no-store, max-age=0");
 }
 
-function readBody(req) {
-  return new Promise((resolve, reject) => {
-    let body = "";
-
-    req.on("data", (chunk) => {
-      body += chunk;
-      if (body.length > 1024 * 1024) {
-        reject(new Error("Request body is too large"));
-        req.destroy();
-      }
-    });
-
-    req.on("end", () => resolve(body));
-    req.on("error", reject);
-  });
+function sendApiError(res, status, message) {
+  return res.status(status).json({ ok: false, error: message });
 }
 
-function serveStatic(req, res) {
-  const url = new URL(req.url, `http://${req.headers.host}`);
-  const requestedPath = decodeURIComponent(url.pathname);
-  const relativePath =
-    requestedPath === "/" ? "play-in-bracket.html" : requestedPath.slice(1);
-  const filePath = path.resolve(root, relativePath);
+function sendBracketPage(req, res) {
+  noStore(res);
+  res.sendFile(path.join(rootDir, "play-in-bracket.html"));
+}
 
-  const relativeToRoot = path.relative(root, filePath);
-  if (relativeToRoot.startsWith("..") || path.isAbsolute(relativeToRoot)) {
-    send(res, 403, "Forbidden");
-    return;
-  }
+app.get("/", sendBracketPage);
+app.get("/play-in-bracket.html", sendBracketPage);
 
-  fs.readFile(filePath, (error, data) => {
-    if (error) {
-      send(res, 404, "Not found");
-      return;
+app.use(
+  "/asset",
+  express.static(path.join(rootDir, "asset"), {
+    etag: false,
+    lastModified: false,
+    maxAge: 0,
+    setHeaders: noStore,
+  }),
+);
+
+app.get("/api/state", async (req, res) => {
+  noStore(res);
+
+  try {
+    const { data, error } = await supabase
+      .from("app_state")
+      .select("data")
+      .eq("id", stateRowId)
+      .maybeSingle();
+
+    if (error) throw error;
+
+    if (!data) {
+      return sendApiError(
+        res,
+        404,
+        "No saved state exists in Supabase for id 'main'. Run supabase-schema.sql or save once.",
+      );
     }
 
-    const extension = path.extname(filePath).toLowerCase();
-    send(res, 200, data, {
-      "Cache-Control": "no-store",
-      "Content-Type": mimeTypes[extension] || "application/octet-stream",
-    });
-  });
-}
-
-const server = http.createServer(async (req, res) => {
-  if (req.method === "POST" && req.url === "/api/state") {
-    try {
-      const body = await readBody(req);
-      const parsed = JSON.parse(body);
-      fs.writeFileSync(statePath, `${JSON.stringify(parsed, null, 2)}\n`);
-      send(res, 200, JSON.stringify({ ok: true }), {
-        "Content-Type": "application/json; charset=utf-8",
-      });
-    } catch (error) {
-      send(res, 400, JSON.stringify({ ok: false, error: error.message }), {
-        "Content-Type": "application/json; charset=utf-8",
-      });
-    }
-    return;
+    return res.json(data.data);
+  } catch (error) {
+    console.error("Supabase load failed:", error);
+    return sendApiError(res, 503, "Unable to load saved state from Supabase.");
   }
-
-  if (req.method === "GET" || req.method === "HEAD") {
-    serveStatic(req, res);
-    return;
-  }
-
-  send(res, 405, "Method not allowed");
 });
 
-server.listen(port, "0.0.0.0", () => {
-  console.log(`R6 bracket running at http://127.0.0.1:${port}/`);
+app.post("/api/state", async (req, res) => {
+  noStore(res);
+
+  try {
+    if (!req.body || typeof req.body !== "object" || Array.isArray(req.body)) {
+      return sendApiError(res, 400, "Request body must be one JSON object.");
+    }
+
+    const { error } = await supabase.from("app_state").upsert(
+      {
+        id: stateRowId,
+        data: req.body,
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: "id" },
+    );
+
+    if (error) throw error;
+
+    return res.json({ ok: true });
+  } catch (error) {
+    console.error("Supabase save failed:", error);
+    return sendApiError(res, 503, "Unable to save state to Supabase.");
+  }
+});
+
+app.use((error, req, res, next) => {
+  if (error instanceof SyntaxError && "body" in error) {
+    noStore(res);
+    return sendApiError(res, 400, "Request body must be valid JSON.");
+  }
+
+  return next(error);
+});
+
+app.use((req, res) => {
+  noStore(res);
+  sendApiError(res, 404, "Not found.");
+});
+
+// Render sets process.env.PORT. The 0.0.0.0 host lets Render route public traffic to this Express app.
+app.listen(port, host, () => {
+  console.log(`R6 bracket app listening on ${host}:${port}`);
 });

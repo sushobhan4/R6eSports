@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Salt Lake City Major</title>
-    <link rel="icon" type="image/png" href="asset\r6Logo.webp" />
+    <link rel="icon" type="image/png" href="asset/r6Logo.png" />
     <style>
       :root {
         color-scheme: dark;
@@ -240,6 +240,8 @@
       .team-tile img {
         width: 48px;
         height: 48px;
+        max-width: 100%;
+        max-height: 100%;
         object-fit: contain;
         filter: drop-shadow(0 9px 10px rgba(0, 0, 0, 0.34));
       }
@@ -1083,6 +1085,7 @@
         font-weight: 800;
         font-size: 11px;
         overflow: hidden;
+        isolation: isolate;
         box-shadow:
           0 0 0 2px rgba(255, 255, 255, 0.12),
           0 8px 16px rgba(0, 0, 0, 0.26);
@@ -1090,10 +1093,9 @@
 
       .badge img {
         display: block;
-        width: 100%;
-        height: 100%;
+        width: calc(100% - 6px);
+        height: calc(100% - 6px);
         object-fit: contain;
-        padding: 3px;
       }
 
       select,
@@ -1603,7 +1605,6 @@
     </template>
 
     <script>
-      const stateFileUrl = "state.json";
       const stateApiUrl = "/api/state";
       const participatingTeams = [
         "All Gamers",
@@ -1643,26 +1644,49 @@
       const teams = ["", ...participatingTeams];
 
       const teamLogos = {
-        "All Gamers": "asset/allGamer.avif",
-        "CAG OSAKA": "asset/cagOSAKA.avif",
-        DarkZero: "asset/darkZero.avif",
-        Daystar: "asset/daystar.avif",
-        "Edward Gaming": "asset/edwardgaming.webp",
-        "ENTERPRISE Esports": "asset/enterprise.avif",
-        "FaZe Clan": "asset/fazeClan.webp",
-        "Five Fears": "asset/fiveYear.avif",
-        "Four Angry Men": "asset/4am.avif",
-        FURIA: "asset/furia.avif",
-        "G2 Esports": "asset/g2.avif",
-        LOS: "asset/los.avif",
-        "Ninjas in Pyjamas": "asset/ninjas.avif",
-        "Shopify Rebellion": "asset/shopify.webp",
-        "Team Falcons": "asset/falcon.avif",
-        "Twisted Minds": "asset/twistedMinds.avif",
-        "Virtus.Pro": "asset/virtusPro.webp",
-        "Weibo Gaming": "asset/WeiboGaming.avif",
-        "Wildcard Gaming": "asset/wildCardGaming.avif",
-        "Wolves Esports": "asset/wolf.avif",
+        "All Gamers": "asset/All_Gamers.png",
+        "CAG OSAKA": "asset/CAG_Osaka.png",
+        DarkZero: "asset/DarkZero.png",
+        Daystar: "asset/Daystar.png",
+        "Edward Gaming": "asset/900px-EDward_Gaming_2017_darkmode.png",
+        "ENTERPRISE Esports": "asset/900px-ENTERPRISE_Esports_2023_allmode.png",
+        "FaZe Clan": "asset/900px-FaZe_Esports_2026_full_darkmode.png",
+        "Five Fears": "asset/900px-Five_Fears_lightmode.png",
+        "Four Angry Men": "asset/Four_Angry_Men.png",
+        FURIA: "asset/900px-FURIA_Esports_full_darkmode.png",
+        "G2 Esports": "asset/1200px-G2_Esports_2020_full_darkmode.png",
+        LOS: "asset/1199px-LOS_full_allmode.png",
+        "Ninjas in Pyjamas": "asset/900px-Ninjas_in_Pyjamas_2021_full_darkmode.png",
+        "Shopify Rebellion": "asset/Shopify_Rebellion_text_2023_darkmode.png",
+        "Team Falcons": "asset/1200px-Team_Falcons_2022_full_darkmode.png",
+        "Twisted Minds": "asset/900px-Twisted_Minds_2023_full_darkmode.png",
+        "Virtus.Pro": "asset/900px-Virtus.pro_2019_allmode.png",
+        "Weibo Gaming": "asset/900px-Weibo_Gaming_full_darkmode.png",
+        "Wildcard Gaming": "asset/1200px-Wildcard_2024_full_darkmode.png",
+        "Wolves Esports": "asset/900px-Wolves_Esports_allmode.png",
+      };
+
+      const teamLogoBackgrounds = {
+        "All Gamers": "#101820",
+        "CAG OSAKA": "#f3f5f6",
+        DarkZero: "#f3f5f6",
+        Daystar: "#101820",
+        "Edward Gaming": "#101820",
+        "ENTERPRISE Esports": "#101820",
+        "FaZe Clan": "#101820",
+        "Five Fears": "#101820",
+        "Four Angry Men": "#101820",
+        FURIA: "#101820",
+        "G2 Esports": "#f3f5f6",
+        LOS: "#f3f5f6",
+        "Ninjas in Pyjamas": "#101820",
+        "Shopify Rebellion": "#101820",
+        "Team Falcons": "#101820",
+        "Twisted Minds": "#101820",
+        "Virtus.Pro": "#f3f5f6",
+        "Weibo Gaming": "#f3f5f6",
+        "Wildcard Gaming": "#101820",
+        "Wolves Esports": "#101820",
       };
 
       const matches = [
@@ -1671,28 +1695,28 @@
           group: "upperQf",
           time: ["Fri", "8", "May", "22:00"],
           teams: ["LOS", "Wolves Esports"],
-          scores: ["7", "0"],
+          scores: [null, null],
         },
         {
           id: "uqf2",
           group: "upperQf",
           time: ["Fri", "8", "May", "22:00"],
           teams: ["Edward Gaming", "ENTERPRISE Esports"],
-          scores: ["2", "7"],
+          scores: [null, null],
         },
         {
           id: "uqf3",
           group: "upperQf",
           time: ["Fri", "8", "May", "23:00"],
           teams: ["Daystar", "Team Falcons"],
-          scores: ["4", "7"],
+          scores: [null, null],
         },
         {
           id: "uqf4",
           group: "upperQf",
           time: ["Sat", "9", "May", "00:00"],
           teams: ["Four Angry Men", "Shopify Rebellion"],
-          scores: ["5", "7"],
+          scores: [null, null],
         },
         {
           id: "usf1",
@@ -2055,7 +2079,6 @@
       };
       const autoSaveDelay = 650;
       let autoSaveTimer;
-      let canWriteStateFile = null;
       const monthIndexByName = {
         jan: 0,
         feb: 1,
@@ -2181,8 +2204,7 @@
         const img = document.createElement("img");
         img.src = teamLogos[teamName];
         img.alt = `${teamName} logo`;
-        badge.style.background =
-          teamName === "Shopify Rebellion" ? "#1e2830" : "#f3f5f6";
+        badge.style.background = teamLogoBackgrounds[teamName] || "#f3f5f6";
         badge.appendChild(img);
       }
 
@@ -3141,13 +3163,6 @@
         };
       }
 
-      function stateEntries(value) {
-        if (Array.isArray(value)) {
-          return value.map((match) => [match.id, match]);
-        }
-        return Object.entries(value || {});
-      }
-
       function applySavedMatch(matchControls, saved) {
         if (!matchControls || !saved) return;
 
@@ -3168,9 +3183,7 @@
       function applyState(savedState) {
         if (!savedState || typeof savedState !== "object") return;
 
-        const savedMatches = Array.isArray(savedState)
-          ? savedState
-          : savedState.matches || {};
+        const savedMatches = savedState.matches || {};
         const savedGenericMatches = savedState.genericMatches || {};
 
         lockedMatches.clear();
@@ -3178,40 +3191,30 @@
         finalizedMatches.clear();
         finalizedGenericMatches.clear();
 
-        stateEntries(savedMatches).forEach(([id, saved]) => {
+        Object.entries(savedMatches).forEach(([id, saved]) => {
           applySavedMatch(controls[id], saved);
         });
 
-        stateEntries(savedGenericMatches).forEach(([id, saved]) => {
+        Object.entries(savedGenericMatches).forEach(([id, saved]) => {
           applySavedMatch(genericControls[id], saved);
         });
 
-        const savedLockedMatches =
-          savedState.lockedMatches || savedState.locked || [];
-        savedLockedMatches.forEach((id) => {
+        (savedState.lockedMatches || []).forEach((id) => {
           if (matchById[id]) lockedMatches.add(id);
         });
 
-        const savedLockedGenericMatches =
-          savedState.lockedGenericMatches || savedState.genericLocked || [];
-        savedLockedGenericMatches.forEach((id) => {
+        (savedState.lockedGenericMatches || []).forEach((id) => {
           if (genericControls[id]) lockedGenericMatches.add(id);
         });
 
-        const savedFinalizedMatches =
-          savedState.finalizedMatches || savedState.finalized || [];
-        savedFinalizedMatches.forEach((id) => {
+        (savedState.finalizedMatches || []).forEach((id) => {
           if (matchById[id]) {
             finalizedMatches.add(id);
             lockedMatches.add(id);
           }
         });
 
-        const savedFinalizedGenericMatches =
-          savedState.finalizedGenericMatches ||
-          savedState.genericFinalized ||
-          [];
-        savedFinalizedGenericMatches.forEach((id) => {
+        (savedState.finalizedGenericMatches || []).forEach((id) => {
           if (genericControls[id]) {
             finalizedGenericMatches.add(id);
             lockedGenericMatches.add(id);
@@ -3236,16 +3239,21 @@
 
       async function loadState() {
         try {
-          const response = await fetch(`${stateFileUrl}?t=${Date.now()}`, {
+          const response = await fetch(`${stateApiUrl}?t=${Date.now()}`, {
             cache: "no-store",
           });
-          if (!response.ok) throw new Error("State file not available");
+          if (!response.ok) {
+            const message =
+              (await response.json().catch(() => null))?.error ||
+              "Saved state not available";
+            throw new Error(message);
+          }
 
           const savedState = await response.json();
           applyState(savedState);
-          showStatus("Loaded state.json");
-        } catch {
-          showStatus("Using default schedule");
+          showStatus("Loaded saved bracket state");
+        } catch (error) {
+          showStatus(error.message || "Using default schedule");
         }
       }
 
@@ -3256,23 +3264,15 @@
           body: JSON.stringify(state, null, 2),
         });
 
-        if (!response.ok) throw new Error("State API failed");
+        if (!response.ok) {
+          const message =
+            (await response.json().catch(() => null))?.error ||
+            "State API failed";
+          throw new Error(message);
+        }
       }
 
-      function downloadStateFile(state) {
-        const blob = new Blob([`${JSON.stringify(state, null, 2)}\n`], {
-          type: "application/json",
-        });
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = "state.json";
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        URL.revokeObjectURL(link.href);
-      }
-
-      async function saveState({ downloadOnFailure = true } = {}) {
+      async function saveState() {
         if (autoSaveTimer) {
           clearTimeout(autoSaveTimer);
           autoSaveTimer = null;
@@ -3282,19 +3282,12 @@
 
         try {
           await writeStateToServer(state);
-          canWriteStateFile = true;
           showStatus(
-            `Saved state.json ${new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`,
+            `Saved bracket state ${new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`,
           );
           return true;
-        } catch {
-          canWriteStateFile = false;
-          if (downloadOnFailure) {
-            downloadStateFile(state);
-            showStatus("Downloaded updated state.json");
-          } else {
-            showStatus("Changes ready - use Save State to export state.json");
-          }
+        } catch (error) {
+          showStatus(error.message || "Save failed - use Save State to retry");
           return false;
         }
       }
@@ -3307,7 +3300,7 @@
         if (autoSaveTimer) clearTimeout(autoSaveTimer);
         autoSaveTimer = setTimeout(() => {
           autoSaveTimer = null;
-          saveState({ downloadOnFailure: canWriteStateFile === true });
+          saveState();
         }, autoSaveDelay);
       }
 

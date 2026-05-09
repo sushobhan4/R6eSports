@@ -1,0 +1,24 @@
+-- Supabase setup:
+-- 1. Open your Supabase project.
+-- 2. Go to SQL Editor.
+-- 3. Run this full file once before deploying to Render.
+--
+-- The app intentionally stores the entire old state.json object in one JSONB column.
+-- Do not split this into multiple SQL tables or rename JSON fields.
+
+create table if not exists public.app_state (
+  id text primary key,
+  data jsonb not null,
+  updated_at timestamp with time zone not null default now()
+);
+
+insert into public.app_state (id, data, updated_at)
+values (
+  'main',
+  '{"version":1,"savedAt":"2026-05-09T03:26:21.321Z","activePhase":"phase-playin","lockedMatches":["uqf1","uqf2","uqf3","uqf4","usf2","usf1","lqf1"],"lockedGenericMatches":[],"finalizedMatches":["uqf1","uqf2","uqf3","uqf4","usf2","usf1"],"finalizedGenericMatches":[],"matches":{"uqf1":{"teams":["LOS","Wolves Esports"],"scores":["7","0"]},"uqf2":{"teams":["Edward Gaming","ENTERPRISE Esports"],"scores":["2","7"]},"uqf3":{"teams":["Daystar","Team Falcons"],"scores":["4","7"]},"uqf4":{"teams":["Four Angry Men","Shopify Rebellion"],"scores":["5","7"]},"usf1":{"teams":["LOS","ENTERPRISE Esports"],"scores":["0","2"]},"usf2":{"teams":["Team Falcons","Shopify Rebellion"],"scores":["2","0"]},"uf1":{"teams":["ENTERPRISE Esports","Team Falcons"],"scores":[null,null]},"lqf1":{"teams":["Wolves Esports","Edward Gaming"],"scores":["0","7"]},"lqf2":{"teams":["Daystar","Four Angry Men"],"scores":[null,null]},"lsf1":{"teams":["Edward Gaming","Shopify Rebellion"],"scores":[null,null]},"lsf2":{"teams":["","LOS"],"scores":[null,null]},"lf1":{"teams":["",""],"scores":[null,null]}},"genericMatches":{"swiss_1_1":{"teams":["",""],"scores":[null,null]},"swiss_1_2":{"teams":["",""],"scores":[null,null]},"swiss_1_3":{"teams":["",""],"scores":[null,null]},"swiss_1_4":{"teams":["",""],"scores":[null,null]},"swiss_1_5":{"teams":["",""],"scores":[null,null]},"swiss_1_6":{"teams":["",""],"scores":[null,null]},"swiss_1_7":{"teams":["",""],"scores":[null,null]},"swiss_1_8":{"teams":["",""],"scores":[null,null]},"swiss_2_1":{"teams":["",""],"scores":[null,null]},"swiss_2_2":{"teams":["",""],"scores":[null,null]},"swiss_2_3":{"teams":["",""],"scores":[null,null]},"swiss_2_4":{"teams":["",""],"scores":[null,null]},"swiss_3_1":{"teams":["",""],"scores":[null,null]},"swiss_3_2":{"teams":["",""],"scores":[null,null]},"swiss_3_3":{"teams":["",""],"scores":[null,null]},"swiss_3_4":{"teams":["",""],"scores":[null,null]},"swiss_4_1":{"teams":["",""],"scores":[null,null]},"swiss_4_2":{"teams":["",""],"scores":[null,null]},"swiss_5_1":{"teams":["",""],"scores":[null,null]},"swiss_5_2":{"teams":["",""],"scores":[null,null]},"swiss_5_3":{"teams":["",""],"scores":[null,null]},"swiss_5_4":{"teams":["",""],"scores":[null,null]},"swiss_6_1":{"teams":["",""],"scores":[null,null]},"swiss_6_2":{"teams":["",""],"scores":[null,null]},"swiss_7_1":{"teams":["",""],"scores":[null,null]},"swiss_7_2":{"teams":["",""],"scores":[null,null]},"swiss_7_3":{"teams":["",""],"scores":[null,null]},"swiss_8_1":{"teams":["",""],"scores":[null,null]},"swiss_8_2":{"teams":["",""],"scores":[null,null]},"swiss_8_3":{"teams":["",""],"scores":[null,null]},"swiss_9_1":{"teams":["",""],"scores":[null,null]},"swiss_9_2":{"teams":["",""],"scores":[null,null]},"swiss_9_3":{"teams":["",""],"scores":[null,null]},"pqf1":{"teams":["",""],"scores":[null,null]},"pqf2":{"teams":["",""],"scores":[null,null]},"pqf3":{"teams":["",""],"scores":[null,null]},"pqf4":{"teams":["",""],"scores":[null,null]},"psf1":{"teams":["",""],"scores":[null,null]},"psf2":{"teams":["",""],"scores":[null,null]},"pf1":{"teams":["",""],"scores":[null,null]}}}'::jsonb,
+  now()
+)
+on conflict (id) do update
+set
+  data = excluded.data,
+  updated_at = now();
