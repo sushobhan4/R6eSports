@@ -1605,7 +1605,6 @@
     </template>
 
     <script>
-      const stateApiUrl = "/api/state";
       const participatingTeams = [
         "All Gamers",
         "CAG OSAKA",
@@ -3239,7 +3238,7 @@
 
       async function loadState() {
         try {
-          const response = await fetch(`${stateApiUrl}?t=${Date.now()}`, {
+          const response = await fetch("/api/state", {
             cache: "no-store",
           });
           if (!response.ok) {
@@ -3251,14 +3250,16 @@
 
           const savedState = await response.json();
           applyState(savedState);
+          console.log("State loaded successfully from Supabase.");
           showStatus("Loaded saved bracket state");
         } catch (error) {
+          console.error("Failed to load state from Supabase:", error);
           showStatus(error.message || "Using default schedule");
         }
       }
 
       async function writeStateToServer(state) {
-        const response = await fetch(stateApiUrl, {
+        const response = await fetch("/api/state", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(state, null, 2),
@@ -3282,11 +3283,13 @@
 
         try {
           await writeStateToServer(state);
+          console.log("State saved successfully to Supabase.");
           showStatus(
             `Saved bracket state ${new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`,
           );
           return true;
         } catch (error) {
+          console.error("Failed to save state to Supabase:", error);
           showStatus(error.message || "Save failed - use Save State to retry");
           return false;
         }
