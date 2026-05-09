@@ -1,0 +1,2639 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Salt Lake City Major</title>
+    <link rel="icon" type="image/png" href="asset\r6Logo.webp" />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #06090d;
+        --panel: rgba(16, 23, 30, 0.86);
+        --panel-strong: rgba(28, 38, 48, 0.96);
+        --line: rgba(222, 240, 242, 0.82);
+        --muted: #9fb1b9;
+        --text: #f6fafb;
+        --red: #ff3e30;
+        --green: #22d36f;
+        --amber: #f2c56e;
+        --cyan: #67d6ef;
+        --ink: #080d12;
+        --border: rgba(225, 239, 244, 0.24);
+        --shadow: 0 26px 70px rgba(0, 0, 0, 0.42);
+        font-family: Inter, "Segoe UI", Arial, sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100vh;
+        margin: 0;
+        color: var(--text);
+        background:
+          linear-gradient(
+            90deg,
+            rgba(255, 62, 48, 0.14) 0 1px,
+            transparent 1px 120px
+          ),
+          linear-gradient(
+            0deg,
+            rgba(103, 214, 239, 0.08) 0 1px,
+            transparent 1px 96px
+          ),
+          linear-gradient(
+            135deg,
+            rgba(10, 14, 20, 0.96),
+            rgba(10, 23, 31, 0.9) 43%,
+            rgba(16, 12, 13, 0.96)
+          ),
+          repeating-linear-gradient(
+            115deg,
+            rgba(255, 255, 255, 0.035) 0 1px,
+            transparent 1px 11px
+          ),
+          var(--bg);
+        letter-spacing: 0;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background:
+          linear-gradient(
+            120deg,
+            transparent 0 20%,
+            rgba(34, 211, 111, 0.08) 20% 22%,
+            transparent 22% 56%,
+            rgba(255, 62, 48, 0.08) 56% 58%,
+            transparent 58%
+          ),
+          linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+        background-size:
+          100% 100%,
+          100% 4px;
+        mix-blend-mode: screen;
+      }
+
+      .app {
+        min-height: 100vh;
+        padding: 22px;
+      }
+
+      .shell {
+        position: relative;
+        width: min(1320px, 100%);
+        margin: 0 auto;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 16px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        background:
+          linear-gradient(
+            145deg,
+            rgba(11, 20, 28, 0.94),
+            rgba(14, 27, 37, 0.86)
+          ),
+          rgba(6, 12, 17, 0.9);
+        backdrop-filter: blur(18px);
+      }
+
+      .shell::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        border-radius: inherit;
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.28),
+          inset 0 -1px 0 rgba(255, 62, 48, 0.18);
+      }
+
+      header {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 22px 24px 18px;
+        border-bottom: 1px solid rgba(229, 241, 245, 0.18);
+        background:
+          linear-gradient(90deg, rgba(255, 62, 48, 0.2), transparent 34%),
+          linear-gradient(270deg, rgba(34, 211, 111, 0.13), transparent 38%);
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(34px, 5vw, 72px);
+        line-height: 0.9;
+        font-family: Impact, Haettenschweiler, "Arial Narrow", sans-serif;
+        text-transform: uppercase;
+        text-shadow: 0 8px 22px rgba(0, 0, 0, 0.42);
+      }
+
+      .title-block {
+        display: grid;
+        gap: 8px;
+      }
+
+      .eyebrow {
+        width: fit-content;
+        padding: 5px 9px;
+        border-left: 3px solid var(--red);
+        color: #0d151a;
+        background: var(--amber);
+        font:
+          900 12px/1 Arial,
+          sans-serif;
+        text-transform: uppercase;
+      }
+
+      .subtitle {
+        max-width: 620px;
+        color: #c6d5da;
+        font-size: 14px;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+
+      button {
+        min-height: 40px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        padding: 9px 14px;
+        color: var(--text);
+        background: linear-gradient(
+          180deg,
+          rgba(55, 71, 85, 0.96),
+          rgba(27, 37, 48, 0.96)
+        );
+        font: inherit;
+        font-size: 13px;
+        font-weight: 900;
+        text-transform: uppercase;
+        cursor: pointer;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.24);
+      }
+
+      button.primary {
+        border-color: rgba(34, 211, 111, 0.8);
+        color: #06110b;
+        background: linear-gradient(180deg, #38f18b, #19a95b);
+      }
+
+      button:hover {
+        filter: brightness(1.12);
+      }
+
+      main {
+        position: relative;
+        padding: 22px 24px 26px;
+      }
+
+      .team-strip {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(104px, 1fr));
+        gap: 10px;
+        margin-bottom: 18px;
+      }
+
+      .team-tile {
+        display: grid;
+        place-items: center;
+        gap: 6px;
+        min-height: 78px;
+        padding: 10px 8px;
+        border: 1px solid rgba(255, 255, 255, 0.13);
+        border-radius: 8px;
+        background:
+          linear-gradient(
+            160deg,
+            rgba(255, 255, 255, 0.1),
+            rgba(255, 255, 255, 0.02)
+          ),
+          rgba(7, 14, 20, 0.74);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.08),
+          0 14px 26px rgba(0, 0, 0, 0.22);
+      }
+
+      .team-tile img {
+        width: 48px;
+        height: 48px;
+        object-fit: contain;
+        filter: drop-shadow(0 9px 10px rgba(0, 0, 0, 0.34));
+      }
+
+      .team-tile .tile-fallback {
+        display: grid;
+        place-items: center;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        color: #07110c;
+        background: linear-gradient(180deg, #f4d389, #c99531);
+        font:
+          900 14px Arial,
+          sans-serif;
+        box-shadow: 0 9px 10px rgba(0, 0, 0, 0.34);
+      }
+
+      .team-tile .tile-name {
+        width: 100%;
+        color: #d9e8ed;
+        font:
+          900 10px/1.15 Arial,
+          sans-serif;
+        text-align: center;
+        text-transform: uppercase;
+      }
+
+      .phase-tabs {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        margin: 0 0 20px;
+      }
+
+      .phase-tab {
+        min-height: 58px;
+        padding: 10px 12px;
+        text-align: left;
+        border-color: rgba(255, 255, 255, 0.14);
+        background:
+          linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.1),
+            rgba(255, 255, 255, 0.03)
+          ),
+          rgba(6, 13, 19, 0.82);
+      }
+
+      .phase-tab span {
+        display: block;
+        margin-top: 4px;
+        color: var(--amber);
+        font-size: 11px;
+      }
+
+      .phase-tab[aria-selected="true"] {
+        border-color: rgba(34, 211, 111, 0.78);
+        color: #07110c;
+        background: linear-gradient(180deg, #38f18b, #19a95b);
+      }
+
+      .phase-tab[aria-selected="true"] span {
+        color: #082014;
+      }
+
+      .phase-panel {
+        display: none;
+      }
+
+      .phase-panel.active {
+        display: block;
+      }
+
+      .phase-summary {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+
+      .summary-card,
+      .phase-card {
+        border: 1px solid rgba(255, 255, 255, 0.13);
+        border-radius: 10px;
+        padding: 14px;
+        background:
+          linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.08),
+            rgba(255, 255, 255, 0.02)
+          ),
+          rgba(5, 12, 18, 0.72);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.08),
+          0 14px 26px rgba(0, 0, 0, 0.22);
+      }
+
+      .summary-card strong,
+      .phase-card strong {
+        display: block;
+        margin-bottom: 6px;
+        color: var(--amber);
+        font:
+          900 12px Arial,
+          sans-serif;
+        text-transform: uppercase;
+      }
+
+      .summary-card span,
+      .phase-card span {
+        color: #d8e7ec;
+        font:
+          800 13px/1.35 Arial,
+          sans-serif;
+      }
+
+      .swiss-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+        gap: 14px;
+      }
+
+      .swiss-group {
+        display: grid;
+        gap: 12px;
+        align-content: start;
+        padding: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 12px;
+        background: rgba(2, 7, 10, 0.32);
+      }
+
+      .swiss-group h3 {
+        margin: 0;
+        color: #07110c;
+        width: fit-content;
+        padding: 6px 9px;
+        border-radius: 5px;
+        background: var(--amber);
+        font:
+          900 12px Arial,
+          sans-serif;
+        text-transform: uppercase;
+      }
+
+      .playoff-bracket .round {
+        gap: 28px;
+      }
+
+      .phase-note {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+        margin-bottom: 22px;
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-height: 54px;
+        padding: 12px 13px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 8px;
+        background:
+          linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.08),
+            rgba(255, 255, 255, 0.02)
+          ),
+          rgba(8, 16, 23, 0.78);
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 900;
+        text-transform: uppercase;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      }
+
+      .dot {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        flex: 0 0 auto;
+        background: var(--amber);
+        box-shadow:
+          0 0 18px rgba(242, 197, 110, 0.44),
+          inset 0 2px 8px rgba(255, 255, 255, 0.28);
+      }
+
+      .dot.lower {
+        background: #f0f2f2;
+      }
+
+      .arrow {
+        width: 28px;
+        height: 12px;
+        position: relative;
+        flex: 0 0 auto;
+        background: var(--green);
+      }
+
+      .arrow::after {
+        content: "";
+        position: absolute;
+        top: -7px;
+        right: -13px;
+        border-top: 13px solid transparent;
+        border-bottom: 13px solid transparent;
+        border-left: 14px solid var(--green);
+      }
+
+      .arrow.red {
+        transform: rotate(25deg);
+        background: var(--red);
+      }
+
+      .arrow.red::after {
+        border-left-color: var(--red);
+      }
+
+      .section-title {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 14px 0 10px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+        margin-bottom: 12px;
+      }
+
+      .section-title h2 {
+        margin: 0;
+        color: var(--text);
+        font:
+          900 18px/1 Impact,
+          Haettenschweiler,
+          "Arial Narrow",
+          sans-serif;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+      }
+
+      .section-title span {
+        color: var(--amber);
+        font-size: 12px;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+
+      .bracket {
+        display: grid;
+        grid-template-columns: 300px 96px 300px 96px 300px;
+        align-items: center;
+        gap: 0;
+        min-width: 1092px;
+      }
+
+      .bracket-wrap {
+        overflow-x: auto;
+        padding: 14px;
+        margin: 0 -14px 18px;
+        border-radius: 12px;
+        background:
+          linear-gradient(
+            90deg,
+            rgba(255, 62, 48, 0.08),
+            transparent 28%,
+            transparent 72%,
+            rgba(34, 211, 111, 0.06)
+          ),
+          rgba(4, 10, 14, 0.34);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      }
+
+      .round {
+        display: grid;
+        gap: 18px;
+      }
+
+      .round.qf.upper {
+        grid-template-rows: repeat(4, auto);
+      }
+
+      .round.sf.upper {
+        grid-template-rows: repeat(2, auto);
+        gap: 92px;
+      }
+
+      .round.final.upper {
+        gap: 0;
+      }
+
+      .round.qf.lower,
+      .round.sf.lower {
+        grid-template-rows: repeat(2, auto);
+        gap: 30px;
+      }
+
+      .spacer {
+        height: 32px;
+      }
+
+      .match {
+        width: 100%;
+        position: relative;
+        border: 1px solid rgba(255, 255, 255, 0.13);
+        border-left: 4px solid rgba(103, 214, 239, 0.85);
+        border-radius: 10px;
+        overflow: hidden;
+        background:
+          linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.09),
+            rgba(255, 255, 255, 0.02)
+          ),
+          var(--panel);
+        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.3);
+        transition:
+          transform 160ms ease,
+          border-color 160ms ease,
+          box-shadow 160ms ease;
+      }
+
+      .match::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 42%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--green));
+      }
+
+      .match:hover {
+        transform: translateY(-2px);
+        border-color: rgba(242, 197, 110, 0.48);
+        box-shadow:
+          0 18px 34px rgba(0, 0, 0, 0.38),
+          0 0 24px rgba(103, 214, 239, 0.1);
+      }
+
+      .match.locked {
+        border-left-color: var(--green);
+      }
+
+      .match.finalized {
+        border-left-color: var(--amber);
+        filter: saturate(0.9);
+      }
+
+      .match.finalized .advance-btn {
+        display: none;
+      }
+
+      .match.finalized .team-cell::after {
+        display: none;
+      }
+
+      .match.pending {
+        opacity: 0.48;
+        filter: saturate(0.65);
+      }
+
+      .match.pending:hover {
+        transform: none;
+        border-color: rgba(255, 255, 255, 0.13);
+        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.3);
+      }
+
+      .match.display-only {
+        border-left-color: var(--amber);
+      }
+
+      .match.display-only .slot {
+        grid-template-columns: 54px minmax(0, 1fr);
+      }
+
+      .match.display-only .score,
+      .match.display-only .advance-btn {
+        display: none;
+      }
+
+      .slot {
+        display: grid;
+        grid-template-columns: 54px minmax(0, 1fr) 48px;
+        min-height: 56px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+      }
+
+      .slot:last-child {
+        border-bottom: 0;
+      }
+
+      .slot.winner {
+        background: linear-gradient(
+          90deg,
+          rgba(34, 211, 111, 0.24),
+          transparent 72%
+        );
+      }
+
+      .slot.loser {
+        background: linear-gradient(
+          90deg,
+          rgba(255, 62, 48, 0.16),
+          transparent 72%
+        );
+      }
+
+      .time {
+        display: grid;
+        place-items: center;
+        padding: 6px;
+        background: linear-gradient(
+          180deg,
+          rgba(120, 141, 153, 0.9),
+          rgba(59, 75, 86, 0.9)
+        );
+        color: #fff;
+        text-align: center;
+        font:
+          900 11px/1.12 Arial,
+          sans-serif;
+        line-height: 1.15;
+        text-transform: uppercase;
+      }
+
+      .team-cell {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 0;
+        padding: 8px 10px;
+      }
+
+      .team-cell.single-team::after {
+        display: none;
+      }
+
+      .team-cell.single-team select {
+        display: none;
+      }
+
+      .team-static {
+        display: block;
+        width: 100%;
+        font:
+          900 12px Arial,
+          sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 0.2px;
+        color: var(--text);
+      }
+
+      .team-cell::after {
+        content: "";
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        width: 8px;
+        height: 8px;
+        border-right: 2px solid rgba(242, 197, 110, 0.95);
+        border-bottom: 2px solid rgba(242, 197, 110, 0.95);
+        pointer-events: none;
+        transform: translateY(-68%) rotate(45deg);
+        transition:
+          transform 160ms ease,
+          border-color 160ms ease;
+      }
+
+      .team-cell:focus-within::after {
+        border-color: #fff;
+        transform: translateY(-42%) rotate(225deg);
+      }
+
+      .badge {
+        display: grid;
+        place-items: center;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        flex: 0 0 auto;
+        color: #07151b;
+        background: rgba(216, 221, 224, 0.92);
+        font-family: Arial, sans-serif;
+        font-weight: 800;
+        font-size: 11px;
+        overflow: hidden;
+        box-shadow:
+          0 0 0 2px rgba(255, 255, 255, 0.12),
+          0 8px 16px rgba(0, 0, 0, 0.26);
+      }
+
+      .badge img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        padding: 3px;
+      }
+
+      select,
+      input[type="number"] {
+        width: 100%;
+        min-width: 0;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 6px;
+        color: var(--text);
+        background: rgba(3, 8, 12, 0.45);
+        font:
+          800 12px Arial,
+          sans-serif;
+        outline: 0;
+      }
+
+      select {
+        height: 38px;
+        padding: 0 36px 0 12px;
+        cursor: pointer;
+        appearance: none;
+        text-transform: uppercase;
+        letter-spacing: 0.2px;
+        background:
+          linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.12),
+            rgba(255, 255, 255, 0.03)
+          ),
+          linear-gradient(90deg, rgba(103, 214, 239, 0.16), transparent 42%),
+          rgba(4, 10, 15, 0.72);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.12),
+          0 8px 16px rgba(0, 0, 0, 0.18);
+        transition:
+          border-color 160ms ease,
+          box-shadow 160ms ease,
+          background 160ms ease,
+          transform 160ms ease;
+      }
+
+      select:hover {
+        border-color: rgba(103, 214, 239, 0.42);
+        background:
+          linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.16),
+            rgba(255, 255, 255, 0.04)
+          ),
+          linear-gradient(90deg, rgba(103, 214, 239, 0.22), transparent 46%),
+          rgba(6, 14, 21, 0.82);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.16),
+          0 10px 18px rgba(0, 0, 0, 0.22),
+          0 0 18px rgba(103, 214, 239, 0.08);
+      }
+
+      select option {
+        color: #f7fbfc;
+        background: #101922;
+        font-weight: 800;
+      }
+
+      select:focus,
+      input[type="number"]:focus {
+        border-color: var(--amber);
+        box-shadow: 0 0 0 3px rgba(242, 197, 110, 0.15);
+        background: rgba(0, 0, 0, 0.38);
+      }
+
+      .score {
+        display: grid;
+        place-items: center;
+        padding: 7px;
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      input[type="number"] {
+        height: 36px;
+        padding: 0 4px;
+        text-align: center;
+        color: var(--amber);
+        font-size: 20px;
+        font-weight: 900;
+        appearance: textfield;
+      }
+
+      input[type="number"]::-webkit-inner-spin-button,
+      input[type="number"]::-webkit-outer-spin-button {
+        appearance: none;
+        margin: 0;
+      }
+
+      .match-actions {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 9px 10px 10px;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(2, 7, 10, 0.28);
+      }
+
+      .winner-label {
+        min-width: 0;
+        color: var(--muted);
+        font:
+          900 11px Arial,
+          sans-serif;
+        text-transform: uppercase;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .advance-btn {
+        min-height: 32px;
+        padding: 7px 10px;
+        border-color: rgba(242, 197, 110, 0.6);
+        color: #07110c;
+        background: linear-gradient(180deg, #f4d389, #c99531);
+        font-size: 11px;
+        flex: 0 0 auto;
+      }
+
+      .advance-btn:disabled,
+      select:disabled,
+      input[type="number"]:disabled {
+        cursor: not-allowed;
+        opacity: 0.62;
+        box-shadow: none;
+      }
+
+      .connector {
+        position: relative;
+        height: 100%;
+        min-height: 120px;
+        filter: drop-shadow(0 0 7px rgba(103, 214, 239, 0.25));
+      }
+
+      .connector::before,
+      .connector::after {
+        content: "";
+        position: absolute;
+        background: linear-gradient(90deg, var(--cyan), var(--line));
+      }
+
+      .connector.split::before {
+        left: 0;
+        right: 0;
+        top: 50%;
+        height: 3px;
+      }
+
+      .connector.split::after {
+        right: 0;
+        top: 23%;
+        bottom: 23%;
+        width: 3px;
+      }
+
+      .connector.straight::before {
+        left: 0;
+        right: 0;
+        top: 50%;
+        height: 3px;
+      }
+
+      .connector.drop::before {
+        left: 8px;
+        right: 8px;
+        top: 50%;
+        height: 2px;
+        background: linear-gradient(90deg, var(--red), var(--green));
+      }
+
+      .connector.drop::after {
+        right: 8px;
+        top: 50%;
+        width: 0;
+        height: 0;
+        transform: translateY(-50%);
+        background: transparent;
+        border-top: 11px solid transparent;
+        border-bottom: 11px solid transparent;
+        border-left: 15px solid var(--green);
+      }
+
+      .round-labels {
+        display: grid;
+        grid-template-columns: 300px 96px 300px 96px 300px;
+        min-width: 1092px;
+        margin: 4px 0 12px;
+        color: #081116;
+        font-size: 12px;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+
+      .round-labels span {
+        width: fit-content;
+        padding: 6px 9px;
+        border-radius: 5px;
+        background: var(--red);
+        box-shadow: 0 8px 20px rgba(255, 62, 48, 0.18);
+      }
+
+      .round-labels span:empty {
+        display: block;
+        padding: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      .round-labels span:nth-child(3),
+      .round-labels span:nth-child(5) {
+        text-align: left;
+      }
+
+      .lower-area {
+        margin-top: 18px;
+      }
+
+      .status {
+        min-height: 20px;
+        margin-top: 10px;
+        color: #d8eef2;
+        font:
+          800 12px Arial,
+          sans-serif;
+        text-align: right;
+        text-transform: uppercase;
+      }
+
+      @media (max-width: 760px) {
+        .app {
+          padding: 10px;
+        }
+
+        header {
+          align-items: stretch;
+          flex-direction: column;
+        }
+
+        .actions {
+          justify-content: flex-start;
+        }
+
+        main {
+          padding: 12px;
+        }
+
+        .phase-note {
+          grid-template-columns: 1fr;
+        }
+
+        .team-strip {
+          grid-template-columns: repeat(3, minmax(72px, 1fr));
+        }
+
+        .phase-tabs,
+        .phase-summary {
+          grid-template-columns: 1fr;
+        }
+
+        .status {
+          text-align: left;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <div class="shell">
+        <header>
+          <div class="title-block">
+            <div class="eyebrow">R6 Esports</div>
+            <h1>SLC Major</h1>
+            <div class="subtitle">
+              Play-in, Swiss Phase, and Playoffs bracket builder with saved
+              state
+            </div>
+          </div>
+          <div>
+            <div class="actions">
+              <button class="primary" id="saveBtn" type="button">
+                Save State
+              </button>
+              <button id="resetBtn" type="button">Reset</button>
+            </div>
+            <div class="status" id="status" aria-live="polite"></div>
+          </div>
+        </header>
+
+        <main>
+          <section
+            class="team-strip"
+            id="teamStrip"
+            aria-label="Participating teams"
+          ></section>
+
+          <nav class="phase-tabs" aria-label="Competition phases">
+            <button
+              class="phase-tab"
+              type="button"
+              data-phase-target="phase-playin"
+              aria-selected="true"
+            >
+              Phase 1<span>Play-in</span>
+            </button>
+            <button
+              class="phase-tab"
+              type="button"
+              data-phase-target="phase-swiss"
+              aria-selected="false"
+            >
+              Phase 2<span>Swiss Phase</span>
+            </button>
+            <button
+              class="phase-tab"
+              type="button"
+              data-phase-target="phase-playoffs"
+              aria-selected="false"
+            >
+              Phase 3<span>Playoffs</span>
+            </button>
+          </nav>
+
+          <section
+            class="phase-panel active"
+            id="phase-playin"
+            data-phase="playin"
+          >
+            <section>
+              <div class="section-title">
+                <h2>Upper Bracket</h2>
+                <span>Winners advance, losers drop</span>
+              </div>
+
+              <div class="bracket-wrap">
+                <div class="round-labels" aria-hidden="true">
+                  <span>Quarter Finals</span>
+                  <span></span>
+                  <span>Semi Finals</span>
+                  <span></span>
+                  <span>Upper Final Spots</span>
+                </div>
+
+                <div class="bracket upper-bracket">
+                  <div class="round qf upper" id="upperQf"></div>
+                  <div class="connector split" aria-hidden="true"></div>
+                  <div class="round sf upper" id="upperSf"></div>
+                  <div class="connector straight" aria-hidden="true"></div>
+                  <div class="round final upper" id="upperFinal"></div>
+                </div>
+              </div>
+            </section>
+
+            <section class="lower-area">
+              <div class="section-title">
+                <h2>Lower Bracket</h2>
+                <span>Drop-down matches</span>
+              </div>
+
+              <div class="bracket-wrap">
+                <div class="round-labels" aria-hidden="true">
+                  <span>Quarter Finals</span>
+                  <span></span>
+                  <span>Semi Finals</span>
+                  <span></span>
+                  <span>Lower Final Spots</span>
+                </div>
+
+                <div class="bracket lower-bracket">
+                  <div class="round qf lower" id="lowerQf"></div>
+                  <div class="connector straight" aria-hidden="true"></div>
+                  <div class="round sf lower" id="lowerSf"></div>
+                  <div class="connector straight" aria-hidden="true"></div>
+                  <div class="round final lower" id="lowerFinal"></div>
+                </div>
+              </div>
+            </section>
+          </section>
+
+          <section class="phase-panel" id="phase-swiss" data-phase="swiss">
+            <div class="section-title">
+              <h2>Swiss Phase</h2>
+              <span>May 10 - May 13 | Swiss System</span>
+            </div>
+
+            <div class="phase-summary">
+              <div class="summary-card">
+                <strong>Team Pool</strong
+                ><span>12 seeded teams plus 4 Play-in qualifiers.</span>
+              </div>
+              <div class="summary-card">
+                <strong>Advance</strong
+                ><span>Teams reaching 3 wins feed the Playoffs tab.</span>
+              </div>
+              <div class="summary-card">
+                <strong>Elimination</strong
+                ><span>Teams reaching 3 losses are out of the Major.</span>
+              </div>
+            </div>
+
+            <div class="phase-card" id="swissPoolCard">
+              <strong>Current Swiss Team Pool</strong>
+              <span id="swissPoolText">Waiting for Play-in qualifiers.</span>
+            </div>
+
+            <div class="swiss-grid" id="swissRounds"></div>
+          </section>
+
+          <section
+            class="phase-panel"
+            id="phase-playoffs"
+            data-phase="playoffs"
+          >
+            <div class="section-title">
+              <h2>Playoffs</h2>
+              <span>May 15 - May 17 | Single Elimination</span>
+            </div>
+
+            <div class="phase-summary">
+              <div class="summary-card">
+                <strong>Quarter Finals</strong><span>8 Swiss qualifiers.</span>
+              </div>
+              <div class="summary-card">
+                <strong>Semi Finals</strong
+                ><span>Quarter-final winners only.</span>
+              </div>
+              <div class="summary-card">
+                <strong>Final</strong
+                ><span>Two semi-final winners decide the champion.</span>
+              </div>
+            </div>
+
+            <div class="bracket-wrap">
+              <div class="round-labels" aria-hidden="true">
+                <span>Quarter Finals</span>
+                <span></span>
+                <span>Semi Finals</span>
+                <span></span>
+                <span>Final</span>
+              </div>
+
+              <div class="bracket playoff-bracket">
+                <div class="round qf upper" id="playoffQf"></div>
+                <div class="connector split" aria-hidden="true"></div>
+                <div class="round sf upper" id="playoffSf"></div>
+                <div class="connector straight" aria-hidden="true"></div>
+                <div class="round final upper" id="playoffFinal"></div>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <template id="matchTemplate">
+      <article class="match">
+        <div class="slot">
+          <div class="time"></div>
+          <div class="team-cell">
+            <span class="badge"></span>
+            <select></select>
+          </div>
+          <div class="score">
+            <input
+              type="number"
+              min="0"
+              max="99"
+              inputmode="numeric"
+              aria-label="Team score"
+            />
+          </div>
+        </div>
+        <div class="slot">
+          <div class="time"></div>
+          <div class="team-cell">
+            <span class="badge"></span>
+            <select></select>
+          </div>
+          <div class="score">
+            <input
+              type="number"
+              min="0"
+              max="99"
+              inputmode="numeric"
+              aria-label="Team score"
+            />
+          </div>
+        </div>
+        <div class="match-actions">
+          <div class="winner-label">Awaiting result</div>
+          <button class="advance-btn" type="button">Lock Winner</button>
+        </div>
+      </article>
+    </template>
+
+    <script>
+      const stateFileUrl = "state.json";
+      const stateApiUrl = "/api/state";
+      const participatingTeams = [
+        "All Gamers",
+        "CAG OSAKA",
+        "DarkZero",
+        "Daystar",
+        "Edward Gaming",
+        "ENTERPRISE Esports",
+        "FaZe Clan",
+        "Five Fears",
+        "Four Angry Men",
+        "FURIA",
+        "G2 Esports",
+        "LOS",
+        "Ninjas in Pyjamas",
+        "Shopify Rebellion",
+        "Team Falcons",
+        "Twisted Minds",
+        "Virtus.Pro",
+        "Weibo Gaming",
+        "Wildcard Gaming",
+        "Wolves Esports",
+      ];
+      const playInTeams = [
+        "LOS",
+        "Wolves Esports",
+        "Edward Gaming",
+        "ENTERPRISE Esports",
+        "Daystar",
+        "Team Falcons",
+        "Shopify Rebellion",
+        "Four Angry Men",
+      ];
+      const directSwissTeams = participatingTeams.filter(
+        (team) => !playInTeams.includes(team),
+      );
+      const teams = ["", ...participatingTeams];
+
+      const teamLogos = {
+        "All Gamers": "asset/allGamer.avif",
+        "CAG OSAKA": "asset/cagOSAKA.avif",
+        DarkZero: "asset/darkZero.avif",
+        Daystar: "asset/daystar.avif",
+        "Edward Gaming": "asset/edwardgaming.webp",
+        "ENTERPRISE Esports": "asset/enterprise.avif",
+        "FaZe Clan": "asset/fazeClan.webp",
+        "Five Fears": "asset/fiveYear.avif",
+        "Four Angry Men": "asset/4am.avif",
+        FURIA: "asset/furia.avif",
+        "G2 Esports": "asset/g2.avif",
+        LOS: "asset/los.avif",
+        "Ninjas in Pyjamas": "asset/ninjas.avif",
+        "Shopify Rebellion": "asset/shopify.webp",
+        "Team Falcons": "asset/falcon.avif",
+        "Twisted Minds": "asset/twistedMinds.avif",
+        "Virtus.Pro": "asset/virtusPro.webp",
+        "Weibo Gaming": "asset/WeiboGaming.avif",
+        "Wildcard Gaming": "asset/wildCardGaming.avif",
+        "Wolves Esports": "asset/wolf.avif",
+      };
+
+      const matches = [
+        {
+          id: "uqf1",
+          group: "upperQf",
+          time: ["Fri", "8", "May", "22:00"],
+          teams: ["LOS", "Wolves Esports"],
+          scores: ["7", "0"],
+        },
+        {
+          id: "uqf2",
+          group: "upperQf",
+          time: ["Fri", "8", "May", "22:00"],
+          teams: ["Edward Gaming", "ENTERPRISE Esports"],
+          scores: ["2", "7"],
+        },
+        {
+          id: "uqf3",
+          group: "upperQf",
+          time: ["Fri", "8", "May", "23:00"],
+          teams: ["Daystar", "Team Falcons"],
+          scores: ["4", "7"],
+        },
+        {
+          id: "uqf4",
+          group: "upperQf",
+          time: ["Sat", "9", "May", "00:00"],
+          teams: ["Four Angry Men", "Shopify Rebellion"],
+          scores: ["5", "7"],
+        },
+        {
+          id: "usf1",
+          group: "upperSf",
+          time: ["Sat", "9", "May", "01:00"],
+          teams: ["", ""],
+          scores: [null, null],
+        },
+        {
+          id: "usf2",
+          group: "upperSf",
+          time: ["Sat", "9", "May", "04:00"],
+          teams: ["", ""],
+          scores: [null, null],
+        },
+        {
+          id: "uf1",
+          group: "upperFinal",
+          time: ["Next", "", "", "TBD"],
+          teams: ["", ""],
+          scores: [null, null],
+        },
+        {
+          id: "lqf1",
+          group: "lowerQf",
+          time: ["Sat", "9", "May", "22:00"],
+          teams: ["", ""],
+          scores: [null, null],
+        },
+        {
+          id: "lqf2",
+          group: "lowerQf",
+          time: ["Sat", "9", "May", "22:00"],
+          teams: ["", ""],
+          scores: [null, null],
+        },
+        {
+          id: "lsf1",
+          group: "lowerSf",
+          time: ["Sun", "10", "May", "01:00"],
+          teams: ["", ""],
+          scores: [null, null],
+        },
+        {
+          id: "lsf2",
+          group: "lowerSf",
+          time: ["Sun", "10", "May", "04:00"],
+          teams: ["", ""],
+          scores: [null, null],
+        },
+        {
+          id: "lf1",
+          group: "lowerFinal",
+          time: ["Next", "", "", "TBD"],
+          teams: ["", ""],
+          scores: [null, null],
+        },
+      ];
+
+      const swissRounds = [
+        {
+          title: "W:0 - L:0",
+          format: "Best of 1",
+          matches: 8,
+          times: [
+            "Sun 10 May 22:00",
+            "Sun 10 May 22:00",
+            "Sun 10 May 23:00",
+            "Sun 10 May 23:00",
+            "Mon 11 May 00:00",
+            "Mon 11 May 00:00",
+            "Mon 11 May 01:00",
+            "Mon 11 May 01:00",
+          ],
+          qualifier: false,
+        },
+        {
+          title: "W:1 - L:0",
+          format: "Best of 1",
+          matches: 4,
+          times: [
+            "Mon 11 May 02:00",
+            "Mon 11 May 03:00",
+            "Mon 11 May 04:00",
+            "Mon 11 May 05:00",
+          ],
+          qualifier: false,
+        },
+        {
+          title: "W:0 - L:1",
+          format: "Best of 1",
+          matches: 4,
+          times: [
+            "Mon 11 May 02:00",
+            "Mon 11 May 03:00",
+            "Mon 11 May 04:00",
+            "Mon 11 May 05:00",
+          ],
+          qualifier: false,
+        },
+        {
+          title: "W:2 - L:0",
+          format: "Best of 1",
+          matches: 2,
+          times: ["Tue 12 May 01:15", "Tue 12 May 01:15"],
+          qualifier: true,
+        },
+        {
+          title: "W:1 - L:1",
+          format: "Best of 1",
+          matches: 4,
+          times: [
+            "Mon 11 May 23:15",
+            "Mon 11 May 23:15",
+            "Tue 12 May 00:15",
+            "Tue 12 May 00:15",
+          ],
+          qualifier: false,
+        },
+        {
+          title: "W:0 - L:2",
+          format: "Best of 3",
+          matches: 2,
+          times: ["Tue 12 May 04:15", "Tue 12 May 04:15"],
+          qualifier: false,
+        },
+        {
+          title: "W:2 - L:1",
+          format: "Best of 3",
+          matches: 3,
+          times: ["Tue 12 May 23:15", "Tue 12 May 23:15", "Wed 13 May 02:15"],
+          qualifier: true,
+        },
+        {
+          title: "W:1 - L:2",
+          format: "Best of 3",
+          matches: 3,
+          times: ["Wed 13 May 02:15", "Wed 13 May 05:15", "Wed 13 May 05:15"],
+          qualifier: false,
+        },
+        {
+          title: "W:2 - L:2",
+          format: "Best of 3",
+          matches: 3,
+          times: ["Wed 13 May 23:15", "Thu 14 May 02:15", "Thu 14 May 05:15"],
+          qualifier: true,
+        },
+      ];
+
+      const playoffMatches = [
+        {
+          id: "pqf1",
+          group: "playoffQf",
+          time: ["Fri", "15", "May", "TBD"],
+          teams: ["", ""],
+          scores: [null, null],
+        },
+        {
+          id: "pqf2",
+          group: "playoffQf",
+          time: ["Fri", "15", "May", "TBD"],
+          teams: ["", ""],
+          scores: [null, null],
+        },
+        {
+          id: "pqf3",
+          group: "playoffQf",
+          time: ["Fri", "15", "May", "TBD"],
+          teams: ["", ""],
+          scores: [null, null],
+        },
+        {
+          id: "pqf4",
+          group: "playoffQf",
+          time: ["Fri", "15", "May", "TBD"],
+          teams: ["", ""],
+          scores: [null, null],
+        },
+        {
+          id: "psf1",
+          group: "playoffSf",
+          time: ["Sat", "16", "May", "TBD"],
+          teams: ["", ""],
+          scores: [null, null],
+        },
+        {
+          id: "psf2",
+          group: "playoffSf",
+          time: ["Sat", "16", "May", "TBD"],
+          teams: ["", ""],
+          scores: [null, null],
+        },
+        {
+          id: "pf1",
+          group: "playoffFinal",
+          time: ["Sun", "17", "May", "TBD"],
+          teams: ["", ""],
+          scores: [null, null],
+        },
+      ];
+
+      const template = document.getElementById("matchTemplate");
+      const status = document.getElementById("status");
+      const teamStrip = document.getElementById("teamStrip");
+      const phaseTabs = [...document.querySelectorAll(".phase-tab")];
+      const phasePanels = [...document.querySelectorAll(".phase-panel")];
+      const swissPoolText = document.getElementById("swissPoolText");
+      const controls = {};
+      const genericControls = {};
+      const genericMatchTimes = {};
+      const lockedMatches = new Set();
+      const lockedGenericMatches = new Set();
+      const finalizedMatches = new Set();
+      const finalizedGenericMatches = new Set();
+      const matchOrder = [
+        "uqf1",
+        "uqf2",
+        "uqf3",
+        "uqf4",
+        "usf1",
+        "usf2",
+        "lqf1",
+        "lqf2",
+        "uf1",
+        "lsf1",
+        "lsf2",
+        "lf1",
+      ];
+      const matchById = Object.fromEntries(
+        matches.map((match) => [match.id, match]),
+      );
+      const displayOnlyMatches = new Set(["uf1", "lf1"]);
+      const swissQualifierMatchIds = [];
+      const playoffSourceMap = {
+        psf1: [{ from: "pqf1" }, { from: "pqf2" }],
+        psf2: [{ from: "pqf3" }, { from: "pqf4" }],
+        pf1: [{ from: "psf1" }, { from: "psf2" }],
+      };
+      const upperQuarterIds = ["uqf1", "uqf2", "uqf3", "uqf4"];
+      const middleStageIds = ["usf1", "usf2", "lqf1", "lqf2"];
+      const slotSources = {
+        usf1: [
+          { from: "uqf1", result: "winner" },
+          { from: "uqf2", result: "winner" },
+        ],
+        usf2: [
+          { from: "uqf3", result: "winner" },
+          { from: "uqf4", result: "winner" },
+        ],
+        lqf1: [
+          { from: "uqf1", result: "loser" },
+          { from: "uqf2", result: "loser" },
+        ],
+        lqf2: [
+          { from: "uqf3", result: "loser" },
+          { from: "uqf4", result: "loser" },
+        ],
+        uf1: [
+          { from: "usf1", result: "winner" },
+          { from: "usf2", result: "winner" },
+        ],
+        lsf1: [
+          { from: "lqf1", result: "winner" },
+          { from: "usf2", result: "loser" },
+        ],
+        lsf2: [
+          { from: "lqf2", result: "winner" },
+          { from: "usf1", result: "loser" },
+        ],
+        lf1: [
+          { from: "lsf1", result: "winner" },
+          { from: "lsf2", result: "winner" },
+        ],
+      };
+      const stageRequirements = {
+        usf1: ["uqf1", "uqf2"],
+        usf2: ["uqf3", "uqf4"],
+        lqf1: ["uqf1", "uqf2"],
+        lqf2: ["uqf3", "uqf4"],
+        uf1: ["usf1", "usf2"],
+        lsf1: ["lqf1", "usf2"],
+        lsf2: ["lqf2", "usf1"],
+        lf1: ["lsf1", "lsf2"],
+      };
+      const autoSaveDelay = 650;
+      let autoSaveTimer;
+      let canWriteStateFile = null;
+      const monthIndexByName = {
+        jan: 0,
+        feb: 1,
+        mar: 2,
+        apr: 3,
+        may: 4,
+        jun: 5,
+        jul: 6,
+        aug: 7,
+        sep: 8,
+        oct: 9,
+        nov: 10,
+        dec: 11,
+      };
+
+      function teamInitials(teamName) {
+        if (!teamName) return "?";
+        return teamName
+          .split(/\s+/)
+          .map((word) => word[0])
+          .join("")
+          .slice(0, 3)
+          .toUpperCase();
+      }
+
+      function renderTeamStrip() {
+        participatingTeams.forEach((team) => {
+          const tile = document.createElement("div");
+          tile.className = "team-tile";
+
+          if (teamLogos[team]) {
+            const img = document.createElement("img");
+            img.src = teamLogos[team];
+            img.alt = `${team} logo`;
+            tile.appendChild(img);
+          } else {
+            const fallback = document.createElement("span");
+            fallback.className = "tile-fallback";
+            fallback.textContent = teamInitials(team);
+            tile.appendChild(fallback);
+          }
+
+          const name = document.createElement("span");
+          name.className = "tile-name";
+          name.textContent = team;
+          tile.appendChild(name);
+          teamStrip.appendChild(tile);
+        });
+      }
+
+      function optionList(selectedTeam, availableTeams = teams) {
+        return availableTeams.map((team) => {
+          const option = document.createElement("option");
+          option.value = team;
+          option.textContent = team || "No team defined";
+          option.selected = team === selectedTeam;
+          return option;
+        });
+      }
+
+      function setOptions(
+        select,
+        availableTeams,
+        selectedTeam,
+        autoPick = false,
+      ) {
+        const realTeams = availableTeams.filter(Boolean);
+
+        const currentTeam =
+          selectedTeam && availableTeams.includes(selectedTeam)
+            ? selectedTeam
+            : realTeams.length === 1
+              ? realTeams[0]
+              : "";
+
+        select.replaceChildren();
+        optionList(currentTeam, availableTeams).forEach((option) =>
+          select.appendChild(option),
+        );
+        select.value = currentTeam;
+        setBadge(select.previousElementSibling, select.value);
+        applySingleChoiceDisplay(select, availableTeams);
+      }
+
+      function applySingleChoiceDisplay(select, availableTeams) {
+        const wrapper = select.parentElement;
+        const hasSingleTeam =
+          availableTeams.length === 2 &&
+          availableTeams[0] === "" &&
+          Boolean(availableTeams[1]);
+        const existingLabel = wrapper.querySelector(".team-static");
+
+        if (hasSingleTeam) {
+          const label = existingLabel || document.createElement("span");
+          label.className = "team-static";
+          label.textContent = availableTeams[1];
+          if (!existingLabel) wrapper.appendChild(label);
+          wrapper.classList.add("single-team");
+          select.setAttribute("aria-hidden", "true");
+          select.tabIndex = -1;
+        } else {
+          if (existingLabel) existingLabel.remove();
+          wrapper.classList.remove("single-team");
+          select.removeAttribute("aria-hidden");
+          select.tabIndex = 0;
+        }
+      }
+
+      function renderTime(parts) {
+        const [day, date, month, hour] = parts;
+        return [day, date, month, hour].filter(Boolean).join("\n");
+      }
+
+      function setBadge(badge, teamName) {
+        badge.textContent = "";
+
+        if (!teamName || !teamLogos[teamName]) {
+          badge.textContent = teamInitials(teamName);
+          badge.style.background = "#d6dde0";
+          return;
+        }
+
+        const img = document.createElement("img");
+        img.src = teamLogos[teamName];
+        img.alt = `${teamName} logo`;
+        badge.style.background =
+          teamName === "Shopify Rebellion" ? "#1e2830" : "#f3f5f6";
+        badge.appendChild(img);
+      }
+
+      function parseMatchTime(parts) {
+        if (!Array.isArray(parts) || parts.length < 4) return null;
+        const [day, dateText, monthText, timeText] = parts.map((part) =>
+          String(part || "").trim(),
+        );
+
+        if (
+          !dateText ||
+          !monthText ||
+          !timeText ||
+          /tbd/i.test(day) ||
+          /tbd/i.test(dateText) ||
+          /tbd/i.test(monthText) ||
+          /tbd/i.test(timeText) ||
+          /^next$/i.test(day)
+        ) {
+          return null;
+        }
+
+        const monthKey = monthText.slice(0, 3).toLowerCase();
+        const monthIndex = monthIndexByName[monthKey];
+        if (monthIndex === undefined) return null;
+
+        const dateNumber = Number(dateText);
+        if (!Number.isFinite(dateNumber)) return null;
+
+        const timeParts = timeText.split(":");
+        if (timeParts.length !== 2) return null;
+        const hour = Number(timeParts[0]);
+        const minute = Number(timeParts[1]);
+        if (!Number.isFinite(hour) || !Number.isFinite(minute)) return null;
+
+        const year = new Date().getFullYear();
+        const matchDate = new Date(year, monthIndex, dateNumber, hour, minute);
+        return Number.isNaN(matchDate.getTime()) ? null : matchDate;
+      }
+
+      function isMatchTimeOver(parts) {
+        const matchDate = parseMatchTime(parts);
+        if (!matchDate) return false;
+        return Date.now() >= matchDate.getTime();
+      }
+
+      function renderMatch(match) {
+        const node = template.content.firstElementChild.cloneNode(true);
+        node.dataset.match = match.id;
+        node.classList.toggle("display-only", displayOnlyMatches.has(match.id));
+
+        const slots = node.querySelectorAll(".slot");
+        slots.forEach((slot, index) => {
+          const time = slot.querySelector(".time");
+          const select = slot.querySelector("select");
+          const score = slot.querySelector("input");
+          const badge = slot.querySelector(".badge");
+
+          time.textContent = renderTime(match.time);
+          select.dataset.match = match.id;
+          select.dataset.slot = String(index);
+          select.setAttribute("aria-label", `${match.id} team ${index + 1}`);
+          optionList(match.teams[index]).forEach((option) =>
+            select.appendChild(option),
+          );
+
+          score.dataset.match = match.id;
+          score.dataset.slot = String(index);
+          score.value = match.scores[index] ?? "";
+
+          setBadge(badge, match.teams[index]);
+          select.addEventListener("change", () => {
+            setBadge(badge, select.value);
+            unlockFrom(match.id);
+            refreshBracket();
+            showStatus("Unsaved changes");
+            queueAutoSave();
+          });
+          score.addEventListener("input", () => {
+            unlockFrom(match.id);
+            refreshBracket();
+            showStatus("Unsaved changes");
+            queueAutoSave();
+          });
+        });
+
+        document.getElementById(match.group).appendChild(node);
+        controls[match.id] = {
+          node,
+          slots: [...node.querySelectorAll(".slot")],
+          selects: [...node.querySelectorAll("select")],
+          scores: [...node.querySelectorAll("input")],
+          button: node.querySelector(".advance-btn"),
+          label: node.querySelector(".winner-label"),
+        };
+        controls[match.id].button.addEventListener("click", () =>
+          lockWinner(match.id),
+        );
+      }
+
+      function getOutcome(matchId) {
+        if (!lockedMatches.has(matchId)) return null;
+
+        const matchControls = controls[matchId];
+        const selectedTeams = matchControls.selects.map(
+          (select) => select.value,
+        );
+        const scores = matchControls.scores.map((score) => Number(score.value));
+
+        if (!selectedTeams[0] || !selectedTeams[1]) return null;
+        if (scores.some((score) => Number.isNaN(score))) return null;
+        if (scores[0] === scores[1]) return null;
+
+        const winnerSlot = scores[0] > scores[1] ? 0 : 1;
+        const loserSlot = winnerSlot === 0 ? 1 : 0;
+
+        return {
+          winner: selectedTeams[winnerSlot],
+          loser: selectedTeams[loserSlot],
+          winnerSlot,
+          loserSlot,
+        };
+      }
+
+      function getSlotChoices(matchId, slotIndex) {
+        const sources = slotSources[matchId];
+        if (!sources) return teams;
+
+        const source = sources[slotIndex];
+        const outcome = source ? getOutcome(source.from) : null;
+        const team = outcome ? outcome[source.result] : "";
+        return team ? ["", team] : [""];
+      }
+
+      function isMatchReady(matchId) {
+        const requiredMatches = stageRequirements[matchId] || [];
+        return requiredMatches.every((requiredId) =>
+          lockedMatches.has(requiredId),
+        );
+      }
+
+      function finalizeMatchIfOver(matchId) {
+        if (finalizedMatches.has(matchId)) return false;
+        const match = matchById[matchId];
+        if (!match) return false;
+        if (!lockedMatches.has(matchId)) return false;
+        if (!isMatchTimeOver(match.time)) return false;
+        finalizedMatches.add(matchId);
+        return true;
+      }
+
+      function finalizeGenericMatchIfOver(matchId) {
+        if (finalizedGenericMatches.has(matchId)) return false;
+        if (!lockedGenericMatches.has(matchId)) return false;
+        if (!isMatchTimeOver(genericMatchTimes[matchId])) return false;
+        finalizedGenericMatches.add(matchId);
+        return true;
+      }
+
+      function unlockFrom(matchId) {
+        [...lockedMatches].forEach((id) => {
+          if (finalizedMatches.has(id)) return;
+          if (id === matchId || matchDependsOn(id, matchId))
+            lockedMatches.delete(id);
+        });
+      }
+
+      function matchDependsOn(targetId, sourceId, visited = new Set()) {
+        if (visited.has(targetId)) return false;
+        visited.add(targetId);
+
+        const directSources = [
+          ...(stageRequirements[targetId] || []),
+          ...(slotSources[targetId] || []).map((source) => source.from),
+        ];
+
+        return directSources.some(
+          (id) => id === sourceId || matchDependsOn(id, sourceId, visited),
+        );
+      }
+
+      function refreshBracket() {
+        matches.forEach((match) => {
+          finalizeMatchIfOver(match.id);
+          const matchControls = controls[match.id];
+          const ready = isMatchReady(match.id);
+          const isFinal = finalizedMatches.has(match.id);
+
+          matchControls.node.classList.toggle("pending", !ready);
+          matchControls.node.classList.toggle(
+            "locked",
+            lockedMatches.has(match.id),
+          );
+          matchControls.node.classList.toggle("finalized", isFinal);
+
+          matchControls.selects.forEach((select, index) => {
+            if (isFinal) {
+              const lockedChoice = select.value ? ["", select.value] : [""];
+              setOptions(select, lockedChoice, select.value);
+              select.disabled = true;
+              return;
+            }
+
+            const choices = getSlotChoices(match.id, index);
+            setOptions(select, choices, select.value);
+            select.disabled = !ready || displayOnlyMatches.has(match.id);
+          });
+
+          matchControls.scores.forEach((score) => {
+            score.disabled =
+              isFinal || !ready || displayOnlyMatches.has(match.id);
+          });
+
+          const outcome = getOutcome(match.id);
+          matchControls.slots.forEach((slot) =>
+            slot.classList.remove("winner", "loser"),
+          );
+
+          if (isFinal) {
+            if (outcome) {
+              matchControls.slots[outcome.winnerSlot].classList.add("winner");
+              matchControls.slots[outcome.loserSlot].classList.add("loser");
+              matchControls.label.textContent = `Finalized: ${outcome.winner}`;
+            } else {
+              matchControls.label.textContent = "Finalized";
+            }
+            matchControls.button.disabled = true;
+            matchControls.button.style.display = "none";
+          } else if (displayOnlyMatches.has(match.id)) {
+            matchControls.node.classList.toggle("locked", ready);
+            matchControls.label.textContent = ready
+              ? "Qualified to Swiss"
+              : "Waiting for feeders";
+            matchControls.button.disabled = true;
+            matchControls.button.style.display = "none";
+          } else if (outcome) {
+            matchControls.slots[outcome.winnerSlot].classList.add("winner");
+            matchControls.slots[outcome.loserSlot].classList.add("loser");
+            matchControls.label.textContent = `Winner: ${outcome.winner}`;
+            matchControls.button.textContent = "Update Winner";
+            matchControls.button.style.display = "";
+          } else {
+            lockedMatches.delete(match.id);
+            matchControls.label.textContent = ready
+              ? "Enter score to lock"
+              : "Waiting for previous stage";
+            matchControls.button.textContent = "Lock Winner";
+            matchControls.button.style.display = "";
+          }
+
+          matchControls.button.disabled =
+            !ready || displayOnlyMatches.has(match.id);
+        });
+
+        refreshSwissTeamPool();
+      }
+
+      function lockWinner(matchId) {
+        if (finalizedMatches.has(matchId)) {
+          showStatus("Match is finalized");
+          return;
+        }
+
+        const matchControls = controls[matchId];
+        const selectedTeams = matchControls.selects.map(
+          (select) => select.value,
+        );
+        const scores = matchControls.scores.map((score) => Number(score.value));
+
+        if (!isMatchReady(matchId)) {
+          showStatus("Previous stage must be completed first");
+          return;
+        }
+
+        if (!selectedTeams[0] || !selectedTeams[1]) {
+          showStatus("Select both teams before locking winner");
+          return;
+        }
+
+        if (
+          matchControls.scores.some((score) => score.value === "") ||
+          scores.some((score) => Number.isNaN(score))
+        ) {
+          showStatus("Enter both scores before locking winner");
+          return;
+        }
+
+        if (scores[0] === scores[1]) {
+          showStatus("Scores cannot be tied");
+          return;
+        }
+
+        lockedMatches.add(matchId);
+        const wasFinalized = finalizeMatchIfOver(matchId);
+        const outcome = getOutcome(matchId);
+        refreshBracket();
+        showStatus(
+          wasFinalized
+            ? `${outcome.winner} finalized`
+            : `${outcome.winner} advanced`,
+        );
+        queueAutoSave();
+      }
+
+      function splitTime(timeText) {
+        const parts = timeText.split(" ");
+        return [parts[0], parts[1], parts[2], parts.slice(3).join(" ")];
+      }
+
+      function getPlayInQualifiers() {
+        return ["usf1", "usf2", "lsf1", "lsf2"]
+          .map((matchId) => getOutcome(matchId)?.winner)
+          .filter(Boolean);
+      }
+
+      function getSwissTeamPool() {
+        return [...new Set([...directSwissTeams, ...getPlayInQualifiers()])];
+      }
+
+      function getPlayoffQualifierPool() {
+        return swissQualifierMatchIds
+          .map((matchId) => getGenericOutcome(matchId)?.winner)
+          .filter(Boolean)
+          .filter((team, index, list) => list.indexOf(team) === index);
+      }
+
+      function renderGenericMatch(container, match, type) {
+        const node = template.content.firstElementChild.cloneNode(true);
+        node.dataset.match = match.id;
+        genericMatchTimes[match.id] = match.time;
+
+        const slots = node.querySelectorAll(".slot");
+        slots.forEach((slot, index) => {
+          const time = slot.querySelector(".time");
+          const select = slot.querySelector("select");
+          const score = slot.querySelector("input");
+          const badge = slot.querySelector(".badge");
+
+          time.textContent = renderTime(match.time);
+          select.dataset.match = match.id;
+          select.dataset.slot = String(index);
+          select.setAttribute("aria-label", `${match.id} team ${index + 1}`);
+          optionList("").forEach((option) => select.appendChild(option));
+
+          score.dataset.match = match.id;
+          score.dataset.slot = String(index);
+          score.value = match.scores[index] ?? "";
+
+          setBadge(badge, "");
+          select.addEventListener("change", () => {
+            setBadge(badge, select.value);
+            unlockGenericFrom(match.id);
+            refreshGenericMatches();
+            showStatus("Unsaved changes");
+            queueAutoSave();
+          });
+          score.addEventListener("input", () => {
+            unlockGenericFrom(match.id);
+            refreshGenericMatches();
+            showStatus("Unsaved changes");
+            queueAutoSave();
+          });
+        });
+
+        container.appendChild(node);
+        genericControls[match.id] = {
+          node,
+          type,
+          slots: [...node.querySelectorAll(".slot")],
+          selects: [...node.querySelectorAll("select")],
+          scores: [...node.querySelectorAll("input")],
+          button: node.querySelector(".advance-btn"),
+          label: node.querySelector(".winner-label"),
+        };
+        genericControls[match.id].button.addEventListener("click", () =>
+          lockGenericWinner(match.id),
+        );
+      }
+
+      function renderSwissPhase() {
+        const root = document.getElementById("swissRounds");
+        swissRounds.forEach((round, roundIndex) => {
+          const group = document.createElement("section");
+          group.className = "swiss-group";
+
+          const title = document.createElement("h3");
+          title.textContent = `${round.title} | ${round.format}`;
+          group.appendChild(title);
+
+          for (let index = 0; index < round.matches; index += 1) {
+            const id = `swiss_${roundIndex + 1}_${index + 1}`;
+            if (round.qualifier) swissQualifierMatchIds.push(id);
+            renderGenericMatch(
+              group,
+              {
+                id,
+                time: splitTime(round.times[index] || "TBD TBD TBD TBD"),
+                teams: ["", ""],
+                scores: [null, null],
+              },
+              "swiss",
+            );
+          }
+
+          root.appendChild(group);
+        });
+      }
+
+      function renderPlayoffs() {
+        playoffMatches.forEach((match) => {
+          renderGenericMatch(
+            document.getElementById(match.group),
+            match,
+            "playoff",
+          );
+        });
+      }
+
+      function getGenericOutcome(matchId) {
+        if (!lockedGenericMatches.has(matchId)) return null;
+
+        const matchControls = genericControls[matchId];
+        const selectedTeams = matchControls.selects.map(
+          (select) => select.value,
+        );
+        const scores = matchControls.scores.map((score) => Number(score.value));
+
+        if (!selectedTeams[0] || !selectedTeams[1]) return null;
+        if (scores.some((score) => Number.isNaN(score))) return null;
+        if (scores[0] === scores[1]) return null;
+
+        const winnerSlot = scores[0] > scores[1] ? 0 : 1;
+        const loserSlot = winnerSlot === 0 ? 1 : 0;
+
+        return {
+          winner: selectedTeams[winnerSlot],
+          loser: selectedTeams[loserSlot],
+          winnerSlot,
+          loserSlot,
+        };
+      }
+
+      function getGenericChoices(matchId, slotIndex) {
+        const matchControls = genericControls[matchId];
+
+        if (matchControls.type === "swiss") {
+          return ["", ...getSwissTeamPool()];
+        }
+
+        const playoffSources = playoffSourceMap[matchId];
+        if (playoffSources) {
+          const source = playoffSources[slotIndex];
+          const team = source ? getGenericOutcome(source.from)?.winner : "";
+          return team ? ["", team] : [""];
+        }
+
+        return ["", ...getPlayoffQualifierPool()];
+      }
+
+      function isGenericMatchReady(matchId) {
+        const matchControls = genericControls[matchId];
+
+        if (matchControls.type === "swiss") {
+          return getSwissTeamPool().length >= 2;
+        }
+
+        const playoffSources = playoffSourceMap[matchId];
+        if (playoffSources) {
+          return playoffSources.every((source) =>
+            lockedGenericMatches.has(source.from),
+          );
+        }
+
+        return getPlayoffQualifierPool().length >= 2;
+      }
+
+      function genericDependsOn(targetId, sourceId, visited = new Set()) {
+        if (visited.has(targetId)) return false;
+        visited.add(targetId);
+
+        const directSources = (playoffSourceMap[targetId] || []).map(
+          (source) => source.from,
+        );
+        return directSources.some(
+          (id) => id === sourceId || genericDependsOn(id, sourceId, visited),
+        );
+      }
+
+      function unlockGenericFrom(matchId) {
+        if (finalizedGenericMatches.has(matchId)) return;
+        lockedGenericMatches.delete(matchId);
+
+        Object.keys(genericControls).forEach((id) => {
+          if (finalizedGenericMatches.has(id)) return;
+          if (genericDependsOn(id, matchId)) lockedGenericMatches.delete(id);
+        });
+
+        if (matchId.startsWith("swiss_")) {
+          playoffMatches.forEach((match) =>
+            lockedGenericMatches.delete(match.id),
+          );
+        }
+      }
+
+      function refreshSwissTeamPool() {
+        const qualifiers = getPlayInQualifiers();
+        const pool = getSwissTeamPool();
+        swissPoolText.textContent = `${pool.length} teams: ${pool.join(", ")}${qualifiers.length < 4 ? " | Waiting for remaining Play-in qualifiers." : ""}`;
+        refreshGenericMatches();
+      }
+
+      function refreshGenericMatches() {
+        Object.entries(genericControls).forEach(([matchId, matchControls]) => {
+          finalizeGenericMatchIfOver(matchId);
+          const ready = isGenericMatchReady(matchId);
+          const isFinal = finalizedGenericMatches.has(matchId);
+          matchControls.node.classList.toggle("pending", !ready);
+          matchControls.node.classList.toggle(
+            "locked",
+            lockedGenericMatches.has(matchId),
+          );
+          matchControls.node.classList.toggle("finalized", isFinal);
+
+          matchControls.selects.forEach((select, index) => {
+            if (isFinal) {
+              const lockedChoice = select.value ? ["", select.value] : [""];
+              setOptions(select, lockedChoice, select.value);
+              select.disabled = true;
+              return;
+            }
+
+            const choices = getGenericChoices(matchId, index);
+            setOptions(select, choices, select.value);
+            select.disabled = !ready;
+          });
+
+          matchControls.scores.forEach((score) => {
+            score.disabled = isFinal || !ready;
+          });
+
+          const outcome = getGenericOutcome(matchId);
+          matchControls.slots.forEach((slot) =>
+            slot.classList.remove("winner", "loser"),
+          );
+
+          if (isFinal) {
+            if (outcome) {
+              matchControls.slots[outcome.winnerSlot].classList.add("winner");
+              matchControls.slots[outcome.loserSlot].classList.add("loser");
+              matchControls.label.textContent = swissQualifierMatchIds.includes(
+                matchId,
+              )
+                ? `Finalized qualifier: ${outcome.winner}`
+                : `Finalized: ${outcome.winner}`;
+            } else {
+              matchControls.label.textContent = "Finalized";
+            }
+            matchControls.button.disabled = true;
+            matchControls.button.style.display = "none";
+          } else if (outcome) {
+            matchControls.slots[outcome.winnerSlot].classList.add("winner");
+            matchControls.slots[outcome.loserSlot].classList.add("loser");
+            matchControls.label.textContent = swissQualifierMatchIds.includes(
+              matchId,
+            )
+              ? `Playoff qualifier: ${outcome.winner}`
+              : `Winner: ${outcome.winner}`;
+            matchControls.button.textContent = "Update Winner";
+            matchControls.button.style.display = "";
+          } else {
+            lockedGenericMatches.delete(matchId);
+            matchControls.label.textContent = ready
+              ? "Enter score to lock"
+              : "Waiting for qualified teams";
+            matchControls.button.textContent = "Lock Winner";
+            matchControls.button.style.display = "";
+          }
+
+          matchControls.button.disabled = !ready;
+        });
+      }
+
+      function lockGenericWinner(matchId) {
+        if (finalizedGenericMatches.has(matchId)) {
+          showStatus("Match is finalized");
+          return;
+        }
+
+        const matchControls = genericControls[matchId];
+        const selectedTeams = matchControls.selects.map(
+          (select) => select.value,
+        );
+        const scores = matchControls.scores.map((score) => Number(score.value));
+
+        if (!isGenericMatchReady(matchId)) {
+          showStatus("Qualified teams are needed first");
+          return;
+        }
+
+        if (!selectedTeams[0] || !selectedTeams[1]) {
+          showStatus("Select both teams before locking winner");
+          return;
+        }
+
+        if (
+          matchControls.scores.some((score) => score.value === "") ||
+          scores.some((score) => Number.isNaN(score))
+        ) {
+          showStatus("Enter both scores before locking winner");
+          return;
+        }
+
+        if (scores[0] === scores[1]) {
+          showStatus("Scores cannot be tied");
+          return;
+        }
+
+        lockedGenericMatches.add(matchId);
+        const wasFinalized = finalizeGenericMatchIfOver(matchId);
+        const outcome = getGenericOutcome(matchId);
+        refreshGenericMatches();
+        showStatus(
+          wasFinalized
+            ? `${outcome.winner} finalized`
+            : `${outcome.winner} advanced`,
+        );
+        queueAutoSave();
+      }
+
+      function setActivePhase(panelId, announce = true) {
+        phaseTabs.forEach((tab) => {
+          tab.setAttribute(
+            "aria-selected",
+            String(tab.dataset.phaseTarget === panelId),
+          );
+        });
+
+        phasePanels.forEach((panel) => {
+          panel.classList.toggle("active", panel.id === panelId);
+        });
+
+        if (announce)
+          showStatus(
+            `${document.querySelector(`[data-phase-target="${panelId}"]`).textContent.trim()} active`,
+          );
+      }
+
+      function readMatchState(matchControls) {
+        return {
+          teams: matchControls.selects.map((select) => select.value),
+          scores: matchControls.scores.map((score) =>
+            score.value === "" ? null : score.value,
+          ),
+        };
+      }
+
+      function getState() {
+        const savedMatches = {};
+        matches.forEach((match) => {
+          savedMatches[match.id] = readMatchState(controls[match.id]);
+        });
+
+        const savedGenericMatches = {};
+        Object.entries(genericControls).forEach(([id, matchControls]) => {
+          savedGenericMatches[id] = readMatchState(matchControls);
+        });
+
+        return {
+          version: 1,
+          savedAt: new Date().toISOString(),
+          activePhase:
+            phasePanels.find((panel) => panel.classList.contains("active"))
+              ?.id || "phase-playin",
+          lockedMatches: [...lockedMatches],
+          lockedGenericMatches: [...lockedGenericMatches],
+          finalizedMatches: [...finalizedMatches],
+          finalizedGenericMatches: [...finalizedGenericMatches],
+          matches: savedMatches,
+          genericMatches: savedGenericMatches,
+        };
+      }
+
+      function stateEntries(value) {
+        if (Array.isArray(value)) {
+          return value.map((match) => [match.id, match]);
+        }
+        return Object.entries(value || {});
+      }
+
+      function applySavedMatch(matchControls, saved) {
+        if (!matchControls || !saved) return;
+
+        (saved.teams || []).forEach((team, index) => {
+          const select = matchControls.selects[index];
+          if (!select) return;
+          const choices = teams.includes(team) ? teams : ["", team];
+          setOptions(select, choices, team);
+          setBadge(select.previousElementSibling, select.value);
+        });
+
+        (saved.scores || []).forEach((score, index) => {
+          const input = matchControls.scores[index];
+          if (input) input.value = score ?? "";
+        });
+      }
+
+      function applyState(savedState) {
+        if (!savedState || typeof savedState !== "object") return;
+
+        const savedMatches = Array.isArray(savedState)
+          ? savedState
+          : savedState.matches || {};
+        const savedGenericMatches = savedState.genericMatches || {};
+
+        lockedMatches.clear();
+        lockedGenericMatches.clear();
+        finalizedMatches.clear();
+        finalizedGenericMatches.clear();
+
+        stateEntries(savedMatches).forEach(([id, saved]) => {
+          applySavedMatch(controls[id], saved);
+        });
+
+        stateEntries(savedGenericMatches).forEach(([id, saved]) => {
+          applySavedMatch(genericControls[id], saved);
+        });
+
+        const savedLockedMatches =
+          savedState.lockedMatches || savedState.locked || [];
+        savedLockedMatches.forEach((id) => {
+          if (matchById[id]) lockedMatches.add(id);
+        });
+
+        const savedLockedGenericMatches =
+          savedState.lockedGenericMatches || savedState.genericLocked || [];
+        savedLockedGenericMatches.forEach((id) => {
+          if (genericControls[id]) lockedGenericMatches.add(id);
+        });
+
+        const savedFinalizedMatches =
+          savedState.finalizedMatches || savedState.finalized || [];
+        savedFinalizedMatches.forEach((id) => {
+          if (matchById[id]) {
+            finalizedMatches.add(id);
+            lockedMatches.add(id);
+          }
+        });
+
+        const savedFinalizedGenericMatches =
+          savedState.finalizedGenericMatches ||
+          savedState.genericFinalized ||
+          [];
+        savedFinalizedGenericMatches.forEach((id) => {
+          if (genericControls[id]) {
+            finalizedGenericMatches.add(id);
+            lockedGenericMatches.add(id);
+          }
+        });
+
+        matches.forEach((match) => finalizeMatchIfOver(match.id));
+        Object.keys(genericControls).forEach((id) =>
+          finalizeGenericMatchIfOver(id),
+        );
+
+        refreshBracket();
+        refreshGenericMatches();
+
+        if (
+          savedState.activePhase &&
+          document.getElementById(savedState.activePhase)
+        ) {
+          setActivePhase(savedState.activePhase, false);
+        }
+      }
+
+      async function loadState() {
+        try {
+          const response = await fetch(`${stateFileUrl}?t=${Date.now()}`, {
+            cache: "no-store",
+          });
+          if (!response.ok) throw new Error("State file not available");
+
+          const savedState = await response.json();
+          applyState(savedState);
+          showStatus("Loaded state.json");
+        } catch {
+          showStatus("Using default schedule");
+        }
+      }
+
+      async function writeStateToServer(state) {
+        const response = await fetch(stateApiUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(state, null, 2),
+        });
+
+        if (!response.ok) throw new Error("State API failed");
+      }
+
+      function downloadStateFile(state) {
+        const blob = new Blob([`${JSON.stringify(state, null, 2)}\n`], {
+          type: "application/json",
+        });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "state.json";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(link.href);
+      }
+
+      async function saveState({ downloadOnFailure = true } = {}) {
+        if (autoSaveTimer) {
+          clearTimeout(autoSaveTimer);
+          autoSaveTimer = null;
+        }
+
+        const state = getState();
+
+        try {
+          await writeStateToServer(state);
+          canWriteStateFile = true;
+          showStatus(
+            `Saved state.json ${new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`,
+          );
+          return true;
+        } catch {
+          canWriteStateFile = false;
+          if (downloadOnFailure) {
+            downloadStateFile(state);
+            showStatus("Downloaded updated state.json");
+          } else {
+            showStatus("Changes ready - use Save State to export state.json");
+          }
+          return false;
+        }
+      }
+
+      function resetState() {
+        applyState({
+          activePhase: "phase-playin",
+          lockedMatches: [],
+          lockedGenericMatches: [],
+          finalizedMatches: [],
+          finalizedGenericMatches: [],
+          matches: Object.fromEntries(
+            matches.map((match) => [
+              match.id,
+              { teams: match.teams, scores: match.scores },
+            ]),
+          ),
+          genericMatches: {},
+        });
+        Object.values(genericControls).forEach((matchControls) => {
+          matchControls.selects.forEach((select) =>
+            setOptions(select, [""], ""),
+          );
+          matchControls.scores.forEach((score) => {
+            score.value = "";
+          });
+        });
+        lockedGenericMatches.clear();
+        refreshGenericMatches();
+        setActivePhase("phase-playin", false);
+        showStatus("Reset to schedule");
+        queueAutoSave();
+      }
+
+      function showStatus(message) {
+        status.textContent = message;
+      }
+
+      function queueAutoSave() {
+        if (autoSaveTimer) clearTimeout(autoSaveTimer);
+        autoSaveTimer = setTimeout(() => {
+          autoSaveTimer = null;
+          saveState({ downloadOnFailure: canWriteStateFile === true });
+        }, autoSaveDelay);
+      }
+
+      renderTeamStrip();
+      matches.forEach(renderMatch);
+      renderSwissPhase();
+      renderPlayoffs();
+      refreshBracket();
+      loadState();
+
+      phaseTabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          setActivePhase(tab.dataset.phaseTarget);
+          queueAutoSave();
+        });
+      });
+      document.getElementById("saveBtn").addEventListener("click", saveState);
+      document.getElementById("resetBtn").addEventListener("click", resetState);
+    </script>
+  </body>
+</html>
