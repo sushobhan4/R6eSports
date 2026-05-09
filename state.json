@@ -1,15 +1,15 @@
 {
   "version": 1,
-  "savedAt": "2026-05-09T01:17:32.777Z",
-  "activePhase": "phase-swiss",
+  "savedAt": "2026-05-09T03:26:21.321Z",
+  "activePhase": "phase-playin",
   "lockedMatches": [
     "uqf1",
     "uqf2",
-    "uqf4",
     "uqf3",
-    "lqf1",
+    "uqf4",
+    "usf2",
     "usf1",
-    "usf2"
+    "lqf1"
   ],
   "lockedGenericMatches": [],
   "finalizedMatches": [
@@ -17,8 +17,8 @@
     "uqf2",
     "uqf3",
     "uqf4",
-    "usf1",
-    "usf2"
+    "usf2",
+    "usf1"
   ],
   "finalizedGenericMatches": [],
   "matches": {

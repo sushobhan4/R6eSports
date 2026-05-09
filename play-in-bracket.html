@@ -21,11 +21,20 @@
         --ink: #080d12;
         --border: rgba(225, 239, 244, 0.24);
         --shadow: 0 26px 70px rgba(0, 0, 0, 0.42);
+        --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
         font-family: Inter, "Segoe UI", Arial, sans-serif;
       }
 
       * {
         box-sizing: border-box;
+        transition-timing-function: var(--ease-smooth);
+        animation-timing-function: var(--ease-smooth);
+      }
+
+      *::before,
+      *::after {
+        transition-timing-function: var(--ease-smooth);
+        animation-timing-function: var(--ease-smooth);
       }
 
       body {
@@ -348,33 +357,386 @@
           sans-serif;
       }
 
+      #phase-swiss .section-title,
+      #phase-swiss .swiss-meta {
+        display: none;
+      }
+
+      .swiss-board {
+        position: relative;
+        padding: 10px 12px 18px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 14px;
+        background: linear-gradient(
+          135deg,
+          rgba(10, 20, 28, 0.96),
+          rgba(12, 26, 36, 0.9) 45%,
+          rgba(9, 16, 22, 0.96)
+        );
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.12),
+          0 20px 40px rgba(0, 0, 0, 0.45);
+        overflow-x: auto;
+      }
+
+      .swiss-board::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background:
+          linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.06) 0 1px,
+            transparent 1px 120px
+          ),
+          linear-gradient(
+            0deg,
+            rgba(255, 255, 255, 0.04) 0 1px,
+            transparent 1px 96px
+          );
+        mix-blend-mode: screen;
+        opacity: 0.6;
+      }
+
+      .swiss-board-title {
+        margin: 0 0 14px;
+        padding: 8px 10px;
+        color: #fff;
+        background: linear-gradient(90deg, #f21d16, #b80f12);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: 4px;
+        font:
+          900 16px/1 Arial,
+          sans-serif;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+      }
+
       .swiss-grid {
+        --swiss-column-height: clamp(760px, 92vh, 940px);
+        --swiss-column-gap: 18px;
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
-        gap: 14px;
+        grid-template-columns: 206px 206px 226px 226px 206px;
+        gap: var(--swiss-column-gap);
+        align-items: stretch;
+        min-width: 1142px;
+        position: relative;
+        padding: 6px 0 2px;
+        isolation: isolate;
+      }
+
+      .swiss-connectors {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+        pointer-events: none;
+      }
+
+      .swiss-connectors path {
+        fill: none;
+        stroke: rgba(222, 240, 242, 0.5);
+        stroke-width: 2;
+        vector-effect: non-scaling-stroke;
+        filter: drop-shadow(0 0 6px rgba(103, 214, 239, 0.22));
+      }
+
+      .swiss-connectors path.qualifier {
+        stroke: rgba(255, 62, 48, 0.92);
+        stroke-width: 3;
+      }
+
+      .swiss-connectors path.elimination {
+        stroke: rgba(205, 215, 220, 0.72);
+        stroke-width: 3;
+      }
+
+      .swiss-column {
+        --swiss-column-pad: clamp(16px, 3vh, 34px);
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        min-height: var(--swiss-column-height);
+        padding-block: var(--swiss-column-pad);
+        align-items: stretch;
+        justify-content: center;
+        z-index: 2;
+      }
+
+      .swiss-column:has(.swiss-match:hover),
+      .swiss-column:has(.swiss-match:focus-within) {
+        z-index: 8;
+      }
+
+      .swiss-column[data-swiss-column="2"],
+      .swiss-column[data-swiss-column="3"],
+      .swiss-column[data-swiss-column="4"] {
+        justify-content: space-evenly;
+      }
+
+      .swiss-column[data-swiss-column="1"],
+      .swiss-column[data-swiss-column="5"] {
+        justify-content: center;
+      }
+
+      .swiss-column-label {
+        width: 100%;
+        padding: 5px 8px;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 4px;
+        color: #081116;
+        background: #cdd5da;
+        font:
+          900 10px/1 Arial,
+          sans-serif;
+        text-align: center;
+        text-transform: uppercase;
       }
 
       .swiss-group {
+        position: relative;
         display: grid;
-        gap: 12px;
-        align-content: start;
-        padding: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 12px;
-        background: rgba(2, 7, 10, 0.32);
+        gap: 8px;
+        padding: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 8px;
+        background: rgba(6, 12, 18, 0.7);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      }
+
+      .swiss-group:has(.swiss-match:hover),
+      .swiss-group:has(.swiss-match:focus-within) {
+        z-index: 9;
+      }
+
+      .swiss-column:not(:last-child) .swiss-group::after {
+        display: none;
+      }
+
+      .swiss-column:not(:last-child) .swiss-group::before {
+        display: none;
       }
 
       .swiss-group h3 {
         margin: 0;
-        color: #07110c;
-        width: fit-content;
-        padding: 6px 9px;
-        border-radius: 5px;
-        background: var(--amber);
+        color: #fff;
+        width: 100%;
+        padding: 6px 8px;
+        border-radius: 4px;
+        background: var(--red);
         font:
-          900 12px Arial,
+          900 11px Arial,
           sans-serif;
+        text-align: center;
         text-transform: uppercase;
+        letter-spacing: 0.3px;
+      }
+
+      .swiss-group h3 span {
+        display: block;
+        margin-top: 3px;
+        color: rgba(255, 255, 255, 0.78);
+        font:
+          900 9px/1 Arial,
+          sans-serif;
+      }
+
+      .swiss-group[data-status="elimination"] h3,
+      .swiss-result-panel.eliminated strong {
+        color: #101820;
+        background: #cdd5da;
+      }
+
+      .swiss-group[data-status="elimination"] h3 span {
+        color: rgba(16, 24, 32, 0.76);
+      }
+
+      .swiss-group[data-status="last-chance"] h3,
+      .swiss-result-panel.advanced strong {
+        background: linear-gradient(90deg, #f21d16, #b80f12);
+      }
+
+      .swiss-format {
+        margin-top: 6px;
+        padding: 4px 6px;
+        border-radius: 4px;
+        color: #d2dde2;
+        font:
+          900 10px Arial,
+          sans-serif;
+        text-align: center;
+        text-transform: uppercase;
+        background: rgba(8, 16, 22, 0.85);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .swiss-match {
+        transform-origin: center;
+        overflow: visible;
+        border-left: 0;
+        border-radius: 6px;
+        background: rgba(10, 18, 24, 0.9);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.08),
+          0 10px 18px rgba(0, 0, 0, 0.28);
+        transition:
+          transform 200ms var(--ease-smooth),
+          border-color 200ms var(--ease-smooth),
+          box-shadow 200ms var(--ease-smooth);
+      }
+
+      .match.swiss-match:hover,
+      .match.swiss-match:focus-within,
+      .match.swiss-match.pending:hover,
+      .match.swiss-match.pending:focus-within {
+        z-index: 10;
+        transform: scale(1.2);
+        border-color: rgba(255, 255, 255, 0.2);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.08),
+          0 22px 34px rgba(0, 0, 0, 0.46),
+          0 0 24px rgba(103, 214, 239, 0.14);
+      }
+
+      .swiss-match::before {
+        display: none;
+      }
+
+      .swiss-match .slot {
+        grid-template-columns: 48px minmax(0, 1fr) 28px;
+        min-height: 30px;
+      }
+
+      .swiss-match .time {
+        padding: 2px;
+        font:
+          900 8px/1.08 Arial,
+          sans-serif;
+        background: linear-gradient(180deg, #253646, #1a2734);
+      }
+
+      .swiss-match .team-cell {
+        padding: 4px 5px;
+        gap: 5px;
+      }
+
+      .swiss-match .team-cell::after {
+        display: none;
+      }
+
+      .swiss-match .badge {
+        width: 20px;
+        height: 20px;
+        font-size: 8px;
+      }
+
+      .swiss-match select {
+        height: 22px;
+        padding: 0 18px 0 5px;
+        font-size: 8px;
+      }
+
+      .swiss-match .score {
+        padding: 4px;
+        background: rgba(255, 255, 255, 0.06);
+      }
+
+      .swiss-match input[type="number"] {
+        height: 22px;
+        font-size: 12px;
+      }
+
+      .swiss-match .match-actions {
+        position: static;
+        min-height: 26px;
+        margin: 3px 6px 6px;
+        padding: 3px 6px;
+        border: 1px solid rgba(242, 197, 110, 0.26);
+        border-radius: 6px;
+        background: rgba(2, 7, 10, 0.9);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.36);
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+      }
+
+      .swiss-match .winner-label {
+        font-size: 8px;
+      }
+
+      .swiss-match .advance-btn {
+        min-height: 24px;
+        padding: 4px 7px;
+        border-radius: 5px;
+        font-size: 9px;
+      }
+
+      .swiss-result-panel {
+        position: relative;
+        display: grid;
+        gap: 8px;
+        padding: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 8px;
+        background: rgba(6, 12, 18, 0.78);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      }
+
+      .swiss-result-panel strong {
+        display: block;
+        width: 100%;
+        padding: 8px;
+        border-radius: 4px;
+        color: #fff;
+        font:
+          900 12px/1 Arial,
+          sans-serif;
+        text-align: center;
+        text-transform: uppercase;
+      }
+
+      .swiss-result-list {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 6px;
+      }
+
+      .swiss-result-slot {
+        display: grid;
+        gap: 5px;
+        justify-items: center;
+        min-height: 62px;
+        padding: 6px 4px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 6px;
+        background: rgba(3, 8, 12, 0.52);
+      }
+
+      .swiss-result-slot .badge {
+        width: 28px;
+        height: 28px;
+      }
+
+      .swiss-result-slot span:last-child {
+        width: 100%;
+        min-width: 0;
+        color: #e9f2f4;
+        font:
+          900 8px/1.1 Arial,
+          sans-serif;
+        text-align: center;
+        text-transform: uppercase;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .swiss-result-slot.empty {
+        opacity: 0.46;
       }
 
       .playoff-bracket .round {
@@ -550,9 +912,9 @@
           var(--panel);
         box-shadow: 0 14px 28px rgba(0, 0, 0, 0.3);
         transition:
-          transform 160ms ease,
-          border-color 160ms ease,
-          box-shadow 160ms ease;
+          transform 60ms ease,
+          border-color 60ms ease,
+          box-shadow 60ms ease;
       }
 
       .match::before {
@@ -699,8 +1061,8 @@
         pointer-events: none;
         transform: translateY(-68%) rotate(45deg);
         transition:
-          transform 160ms ease,
-          border-color 160ms ease;
+          transform 60ms ease,
+          border-color 60ms ease;
       }
 
       .team-cell:focus-within::after {
@@ -767,10 +1129,10 @@
           inset 0 1px 0 rgba(255, 255, 255, 0.12),
           0 8px 16px rgba(0, 0, 0, 0.18);
         transition:
-          border-color 160ms ease,
-          box-shadow 160ms ease,
-          background 160ms ease,
-          transform 160ms ease;
+          border-color 60ms ease,
+          box-shadow 60ms ease,
+          background 60ms ease,
+          transform 60ms ease;
       }
 
       select:hover {
@@ -1020,7 +1382,6 @@
               <button class="primary" id="saveBtn" type="button">
                 Save State
               </button>
-              <button id="resetBtn" type="button">Reset</button>
             </div>
             <div class="status" id="status" aria-live="polite"></div>
           </div>
@@ -1117,12 +1478,23 @@
           </section>
 
           <section class="phase-panel" id="phase-swiss" data-phase="swiss">
-            <div class="section-title">
-              <h2>Swiss Phase</h2>
-              <span>May 10 - May 13 | Swiss System</span>
+            <div class="swiss-board">
+              <div class="swiss-board-title">Phase 2 - Swiss Stage</div>
+              <div class="swiss-grid" id="swissRounds">
+                <svg
+                  class="swiss-connectors"
+                  id="swissConnectors"
+                  aria-hidden="true"
+                ></svg>
+                <div class="swiss-column" data-swiss-column="1"></div>
+                <div class="swiss-column" data-swiss-column="2"></div>
+                <div class="swiss-column" data-swiss-column="3"></div>
+                <div class="swiss-column" data-swiss-column="4"></div>
+                <div class="swiss-column" data-swiss-column="5"></div>
+              </div>
             </div>
 
-            <div class="phase-summary">
+            <div class="phase-summary swiss-meta">
               <div class="summary-card">
                 <strong>Team Pool</strong
                 ><span>12 seeded teams plus 4 Play-in qualifiers.</span>
@@ -1137,12 +1509,10 @@
               </div>
             </div>
 
-            <div class="phase-card" id="swissPoolCard">
+            <div class="phase-card swiss-meta" id="swissPoolCard">
               <strong>Current Swiss Team Pool</strong>
               <span id="swissPoolText">Waiting for Play-in qualifiers.</span>
             </div>
-
-            <div class="swiss-grid" id="swissRounds"></div>
           </section>
 
           <section
@@ -1385,6 +1755,8 @@
       const swissRounds = [
         {
           title: "W:0 - L:0",
+          record: "0-0",
+          stageLabel: "Opening Matches",
           format: "Best of 1",
           matches: 8,
           times: [
@@ -1397,10 +1769,14 @@
             "Mon 11 May 01:00",
             "Mon 11 May 01:00",
           ],
+          prerequisites: [],
           qualifier: false,
+          eliminator: false,
         },
         {
           title: "W:1 - L:0",
+          record: "1-0",
+          stageLabel: "High Matches",
           format: "Best of 1",
           matches: 4,
           times: [
@@ -1409,10 +1785,14 @@
             "Mon 11 May 04:00",
             "Mon 11 May 05:00",
           ],
+          prerequisites: [0],
           qualifier: false,
+          eliminator: false,
         },
         {
           title: "W:0 - L:1",
+          record: "0-1",
+          stageLabel: "Low Matches",
           format: "Best of 1",
           matches: 4,
           times: [
@@ -1421,17 +1801,27 @@
             "Mon 11 May 04:00",
             "Mon 11 May 05:00",
           ],
+          prerequisites: [0],
           qualifier: false,
+          eliminator: false,
         },
         {
           title: "W:2 - L:0",
+          label: "Winners Advance",
+          status: "advance",
+          record: "2-0",
+          stageLabel: "Winners Advance",
           format: "Best of 1",
           matches: 2,
           times: ["Tue 12 May 01:15", "Tue 12 May 01:15"],
+          prerequisites: [1],
           qualifier: true,
+          eliminator: false,
         },
         {
           title: "W:1 - L:1",
+          record: "1-1",
+          stageLabel: "Even Record",
           format: "Best of 1",
           matches: 4,
           times: [
@@ -1440,36 +1830,71 @@
             "Tue 12 May 00:15",
             "Tue 12 May 00:15",
           ],
+          prerequisites: [1, 2],
           qualifier: false,
+          eliminator: false,
         },
         {
           title: "W:0 - L:2",
+          label: "Elimination Game",
+          status: "elimination",
+          record: "0-2",
+          stageLabel: "Elimination Game",
           format: "Best of 3",
           matches: 2,
           times: ["Tue 12 May 04:15", "Tue 12 May 04:15"],
+          prerequisites: [2],
           qualifier: false,
+          eliminator: true,
         },
         {
           title: "W:2 - L:1",
+          label: "Winners Advance",
+          status: "advance",
+          record: "2-1",
+          stageLabel: "Winners Advance",
           format: "Best of 3",
           matches: 3,
           times: ["Tue 12 May 23:15", "Tue 12 May 23:15", "Wed 13 May 02:15"],
+          prerequisites: [3, 4],
           qualifier: true,
+          eliminator: false,
         },
         {
           title: "W:1 - L:2",
+          label: "Elimination Game",
+          status: "elimination",
+          record: "1-2",
+          stageLabel: "Elimination Game",
           format: "Best of 3",
           matches: 3,
           times: ["Wed 13 May 02:15", "Wed 13 May 05:15", "Wed 13 May 05:15"],
+          prerequisites: [4, 5],
           qualifier: false,
+          eliminator: true,
         },
         {
           title: "W:2 - L:2",
+          label: "Last Chance",
+          status: "last-chance",
+          record: "2-2",
+          stageLabel: "Last Chance",
           format: "Best of 3",
           matches: 3,
           times: ["Wed 13 May 23:15", "Thu 14 May 02:15", "Thu 14 May 05:15"],
+          prerequisites: [6, 7],
           qualifier: true,
+          eliminator: true,
         },
+      ];
+
+      const swissLayout = [[0], [1, 2], [3, 4, 5], [6, 7], [8]];
+      const swissColumnLabels = [
+        "Round 1",
+        "Round 2",
+        "Round 3",
+        "Round 4",
+        "Round 5 / Results",
       ];
 
       const playoffMatches = [
@@ -1556,6 +1981,27 @@
       );
       const displayOnlyMatches = new Set(["uf1", "lf1"]);
       const swissQualifierMatchIds = [];
+      const swissEliminationMatchIds = [];
+      const swissConnectorPairs = [
+        { from: 0, to: 1 },
+        { from: 0, to: 2 },
+        { from: 1, to: 3 },
+        { from: 1, to: 4 },
+        { from: 2, to: 4 },
+        { from: 2, to: 5 },
+        { from: 3, to: "advanced", type: "qualifier" },
+        { from: 3, to: 6 },
+        { from: 4, to: 6 },
+        { from: 4, to: 7 },
+        { from: 5, to: 7 },
+        { from: 5, to: "eliminated", type: "elimination" },
+        { from: 6, to: "advanced", type: "qualifier" },
+        { from: 6, to: 8 },
+        { from: 7, to: 8 },
+        { from: 7, to: "eliminated", type: "elimination" },
+        { from: 8, to: "advanced", type: "qualifier" },
+        { from: 8, to: "eliminated", type: "elimination" },
+      ];
       const playoffSourceMap = {
         psf1: [{ from: "pqf1" }, { from: "pqf2" }],
         psf2: [{ from: "pqf3" }, { from: "pqf4" }],
@@ -2056,17 +2502,137 @@
         return [...new Set([...directSwissTeams, ...getPlayInQualifiers()])];
       }
 
+      function uniqueTeams(teamList) {
+        return teamList.filter(
+          (team, index, list) => team && list.indexOf(team) === index,
+        );
+      }
+
+      function swissMatchId(roundIndex, matchIndex) {
+        return `swiss_${roundIndex + 1}_${matchIndex + 1}`;
+      }
+
+      function getSwissRoundIndex(matchId) {
+        const match = /^swiss_(\d+)_\d+$/.exec(matchId);
+        return match ? Number(match[1]) - 1 : -1;
+      }
+
+      function getSwissRoundMatchIds(roundIndex) {
+        const round = swissRounds[roundIndex];
+        if (!round) return [];
+        return Array.from({ length: round.matches }, (_, matchIndex) =>
+          swissMatchId(roundIndex, matchIndex),
+        );
+      }
+
+      function isSwissRoundComplete(roundIndex) {
+        const matchIds = getSwissRoundMatchIds(roundIndex);
+        return (
+          matchIds.length > 0 &&
+          matchIds.every((matchId) => lockedGenericMatches.has(matchId))
+        );
+      }
+
+      function getNextSwissRecord(record, result) {
+        const [wins, losses] = record.split("-").map(Number);
+        return result === "winner"
+          ? `${wins + 1}-${losses}`
+          : `${wins}-${losses + 1}`;
+      }
+
+      function getSwissRecordBuckets() {
+        const buckets = { "0-0": getSwissTeamPool() };
+
+        swissRounds.forEach((round, roundIndex) => {
+          getSwissRoundMatchIds(roundIndex).forEach((matchId) => {
+            const outcome = getGenericOutcome(matchId);
+            if (!outcome) return;
+
+            const winnerRecord = getNextSwissRecord(round.record, "winner");
+            const loserRecord = getNextSwissRecord(round.record, "loser");
+
+            if (!winnerRecord.startsWith("3-")) {
+              buckets[winnerRecord] = buckets[winnerRecord] || [];
+              buckets[winnerRecord].push(outcome.winner);
+            }
+
+            if (!loserRecord.endsWith("-3")) {
+              buckets[loserRecord] = buckets[loserRecord] || [];
+              buckets[loserRecord].push(outcome.loser);
+            }
+          });
+        });
+
+        Object.keys(buckets).forEach((record) => {
+          buckets[record] = uniqueTeams(buckets[record]);
+        });
+
+        return buckets;
+      }
+
+      function getSwissAvailableTeamsForRound(roundIndex) {
+        const round = swissRounds[roundIndex];
+        if (!round) return [];
+        return getSwissRecordBuckets()[round.record] || [];
+      }
+
+      function isSwissRoundReady(roundIndex) {
+        const round = swissRounds[roundIndex];
+        if (!round) return false;
+        if (roundIndex === 0 && getSwissTeamPool().length < 16) return false;
+        if (!round.prerequisites.every(isSwissRoundComplete)) return false;
+        return getSwissAvailableTeamsForRound(roundIndex).length >= 2;
+      }
+
       function getPlayoffQualifierPool() {
-        return swissQualifierMatchIds
-          .map((matchId) => getGenericOutcome(matchId)?.winner)
-          .filter(Boolean)
-          .filter((team, index, list) => list.indexOf(team) === index);
+        return uniqueTeams(
+          swissQualifierMatchIds
+            .map((matchId) => getGenericOutcome(matchId)?.winner)
+            .filter(Boolean),
+        );
+      }
+
+      function getSwissEliminatedPool() {
+        return uniqueTeams(
+          swissEliminationMatchIds
+            .map((matchId) => getGenericOutcome(matchId)?.loser)
+            .filter(Boolean),
+        );
+      }
+
+      function addSelectedChoice(choices, selectedTeam) {
+        if (selectedTeam && !choices.includes(selectedTeam)) {
+          return [...choices, selectedTeam];
+        }
+        return choices;
+      }
+
+      function getSwissOutcomeLabel(matchId, outcome, isFinal = false) {
+        const prefix = isFinal ? "Finalized" : "";
+        if (
+          swissQualifierMatchIds.includes(matchId) &&
+          swissEliminationMatchIds.includes(matchId)
+        ) {
+          return `${prefix ? `${prefix}: ` : ""}${outcome.winner} advanced | ${outcome.loser} eliminated`;
+        }
+
+        if (swissQualifierMatchIds.includes(matchId)) {
+          return `${prefix ? `${prefix} qualifier: ` : "Playoff qualifier: "}${outcome.winner}`;
+        }
+
+        if (swissEliminationMatchIds.includes(matchId)) {
+          return `${prefix ? `${prefix} elimination: ` : "Eliminated: "}${outcome.loser}`;
+        }
+
+        return `${prefix ? `${prefix}: ` : "Winner: "}${outcome.winner}`;
       }
 
       function renderGenericMatch(container, match, type) {
         const node = template.content.firstElementChild.cloneNode(true);
         node.dataset.match = match.id;
         genericMatchTimes[match.id] = match.time;
+
+        if (type === "swiss") node.classList.add("swiss-match");
 
         const slots = node.querySelectorAll(".slot");
         slots.forEach((slot, index) => {
@@ -2116,33 +2682,166 @@
         );
       }
 
+      function renderSwissResultPanel(type, title) {
+        const panel = document.createElement("section");
+        panel.className = `swiss-result-panel ${type}`;
+        panel.dataset.swissResult = type;
+
+        const heading = document.createElement("strong");
+        heading.textContent = title;
+        panel.appendChild(heading);
+
+        const list = document.createElement("div");
+        list.className = "swiss-result-list";
+        list.id =
+          type === "advanced" ? "swissAdvancedList" : "swissEliminatedList";
+        panel.appendChild(list);
+
+        return panel;
+      }
+
+      function refreshSwissResultList(listId, teams) {
+        const list = document.getElementById(listId);
+        if (!list) return;
+
+        list.replaceChildren();
+        Array.from({ length: 8 }, (_, index) => teams[index] || "").forEach(
+          (team) => {
+            const slot = document.createElement("div");
+            slot.className = `swiss-result-slot${team ? "" : " empty"}`;
+
+            const badge = document.createElement("span");
+            badge.className = "badge";
+            setBadge(badge, team);
+            slot.appendChild(badge);
+
+            const name = document.createElement("span");
+            name.textContent = team || "TBD";
+            slot.appendChild(name);
+
+            list.appendChild(slot);
+          },
+        );
+      }
+
+      function refreshSwissResults() {
+        refreshSwissResultList("swissAdvancedList", getPlayoffQualifierPool());
+        refreshSwissResultList("swissEliminatedList", getSwissEliminatedPool());
+      }
+
+      function getSwissConnectorTarget(target) {
+        const root = document.getElementById("swissRounds");
+        if (typeof target === "number") {
+          return root.querySelector(`[data-swiss-round="${target}"]`);
+        }
+        return root.querySelector(`[data-swiss-result="${target}"]`);
+      }
+
+      function drawSwissConnectors() {
+        const root = document.getElementById("swissRounds");
+        const svg = document.getElementById("swissConnectors");
+        if (!root || !svg) return;
+
+        const rootRect = root.getBoundingClientRect();
+        svg.setAttribute("viewBox", `0 0 ${root.scrollWidth} ${root.scrollHeight}`);
+        svg.replaceChildren();
+
+        swissConnectorPairs.forEach(({ from, to, type }) => {
+          const source = getSwissConnectorTarget(from);
+          const target = getSwissConnectorTarget(to);
+          if (!source || !target) return;
+
+          const sourceRect = source.getBoundingClientRect();
+          const targetRect = target.getBoundingClientRect();
+          const sx = sourceRect.right - rootRect.left;
+          const sy = sourceRect.top + sourceRect.height / 2 - rootRect.top;
+          const tx = targetRect.left - rootRect.left;
+          const ty = targetRect.top + targetRect.height / 2 - rootRect.top;
+          const midX = sx + (tx - sx) * 0.52;
+
+          const path = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "path",
+          );
+          path.setAttribute("d", `M ${sx} ${sy} C ${midX} ${sy}, ${midX} ${ty}, ${tx} ${ty}`);
+          if (type) path.classList.add(type);
+          svg.appendChild(path);
+        });
+      }
+
+      function scheduleSwissConnectors() {
+        requestAnimationFrame(drawSwissConnectors);
+      }
+
       function renderSwissPhase() {
         const root = document.getElementById("swissRounds");
-        swissRounds.forEach((round, roundIndex) => {
-          const group = document.createElement("section");
-          group.className = "swiss-group";
+        const columns = [...root.querySelectorAll(".swiss-column")];
+        swissQualifierMatchIds.length = 0;
+        swissEliminationMatchIds.length = 0;
+        columns.forEach((column, index) => {
+          column.replaceChildren();
 
-          const title = document.createElement("h3");
-          title.textContent = `${round.title} | ${round.format}`;
-          group.appendChild(title);
+          const label = document.createElement("div");
+          label.className = "swiss-column-label";
+          label.textContent = swissColumnLabels[index] || `Round ${index + 1}`;
+          column.appendChild(label);
+        });
 
-          for (let index = 0; index < round.matches; index += 1) {
-            const id = `swiss_${roundIndex + 1}_${index + 1}`;
-            if (round.qualifier) swissQualifierMatchIds.push(id);
-            renderGenericMatch(
-              group,
-              {
-                id,
-                time: splitTime(round.times[index] || "TBD TBD TBD TBD"),
-                teams: ["", ""],
-                scores: [null, null],
-              },
-              "swiss",
-            );
+        swissLayout.forEach((roundIndexes, columnIndex) => {
+          const column = columns[columnIndex] || root;
+          if (columnIndex === 4) {
+            column.appendChild(renderSwissResultPanel("advanced", "Advanced"));
           }
 
-          root.appendChild(group);
+          roundIndexes.forEach((roundIndex) => {
+            const round = swissRounds[roundIndex];
+            if (!round) return;
+
+            const group = document.createElement("section");
+            group.className = "swiss-group";
+            group.dataset.swissRound = String(roundIndex);
+            if (round.status) group.dataset.status = round.status;
+
+            const title = document.createElement("h3");
+            title.textContent = round.label || round.title;
+            if (round.label) {
+              const record = document.createElement("span");
+              record.textContent = round.title;
+              title.appendChild(record);
+            }
+            group.appendChild(title);
+
+            for (let index = 0; index < round.matches; index += 1) {
+              const id = swissMatchId(roundIndex, index);
+              if (round.qualifier) swissQualifierMatchIds.push(id);
+              if (round.eliminator) swissEliminationMatchIds.push(id);
+              renderGenericMatch(
+                group,
+                {
+                  id,
+                  time: splitTime(round.times[index] || "TBD TBD TBD TBD"),
+                  teams: ["", ""],
+                  scores: [null, null],
+                },
+                "swiss",
+              );
+            }
+
+            const format = document.createElement("div");
+            format.className = "swiss-format";
+            format.textContent = round.format;
+            group.appendChild(format);
+
+            column.appendChild(group);
+          });
+
+          if (columnIndex === 4) {
+            column.appendChild(renderSwissResultPanel("eliminated", "Eliminated"));
+          }
         });
+
+        refreshSwissResults();
+        scheduleSwissConnectors();
       }
 
       function renderPlayoffs() {
@@ -2183,7 +2882,9 @@
         const matchControls = genericControls[matchId];
 
         if (matchControls.type === "swiss") {
-          return ["", ...getSwissTeamPool()];
+          const roundIndex = getSwissRoundIndex(matchId);
+          const choices = ["", ...getSwissAvailableTeamsForRound(roundIndex)];
+          return addSelectedChoice(choices, matchControls.selects[slotIndex].value);
         }
 
         const playoffSources = playoffSourceMap[matchId];
@@ -2200,7 +2901,10 @@
         const matchControls = genericControls[matchId];
 
         if (matchControls.type === "swiss") {
-          return getSwissTeamPool().length >= 2;
+          return (
+            lockedGenericMatches.has(matchId) ||
+            isSwissRoundReady(getSwissRoundIndex(matchId))
+          );
         }
 
         const playoffSources = playoffSourceMap[matchId];
@@ -2210,7 +2914,7 @@
           );
         }
 
-        return getPlayoffQualifierPool().length >= 2;
+        return getPlayoffQualifierPool().length >= 8;
       }
 
       function genericDependsOn(targetId, sourceId, visited = new Set()) {
@@ -2235,6 +2939,17 @@
         });
 
         if (matchId.startsWith("swiss_")) {
+          const changedRoundIndex = getSwissRoundIndex(matchId);
+          Object.keys(genericControls).forEach((id) => {
+            if (finalizedGenericMatches.has(id)) return;
+            if (
+              id.startsWith("swiss_") &&
+              getSwissRoundIndex(id) > changedRoundIndex
+            ) {
+              lockedGenericMatches.delete(id);
+            }
+          });
+
           playoffMatches.forEach((match) =>
             lockedGenericMatches.delete(match.id),
           );
@@ -2286,11 +3001,10 @@
             if (outcome) {
               matchControls.slots[outcome.winnerSlot].classList.add("winner");
               matchControls.slots[outcome.loserSlot].classList.add("loser");
-              matchControls.label.textContent = swissQualifierMatchIds.includes(
-                matchId,
-              )
-                ? `Finalized qualifier: ${outcome.winner}`
-                : `Finalized: ${outcome.winner}`;
+              matchControls.label.textContent =
+                matchControls.type === "swiss"
+                  ? getSwissOutcomeLabel(matchId, outcome, true)
+                  : `Finalized: ${outcome.winner}`;
             } else {
               matchControls.label.textContent = "Finalized";
             }
@@ -2299,24 +3013,28 @@
           } else if (outcome) {
             matchControls.slots[outcome.winnerSlot].classList.add("winner");
             matchControls.slots[outcome.loserSlot].classList.add("loser");
-            matchControls.label.textContent = swissQualifierMatchIds.includes(
-              matchId,
-            )
-              ? `Playoff qualifier: ${outcome.winner}`
-              : `Winner: ${outcome.winner}`;
+            matchControls.label.textContent =
+              matchControls.type === "swiss"
+                ? getSwissOutcomeLabel(matchId, outcome)
+                : `Winner: ${outcome.winner}`;
             matchControls.button.textContent = "Update Winner";
             matchControls.button.style.display = "";
           } else {
             lockedGenericMatches.delete(matchId);
             matchControls.label.textContent = ready
               ? "Enter score to lock"
-              : "Waiting for qualified teams";
+              : matchControls.type === "swiss"
+                ? "Waiting for feeder record"
+                : "Waiting for qualified teams";
             matchControls.button.textContent = "Lock Winner";
             matchControls.button.style.display = "";
           }
 
           matchControls.button.disabled = !ready;
         });
+
+        refreshSwissResults();
+        scheduleSwissConnectors();
       }
 
       function lockGenericWinner(matchId) {
@@ -2359,9 +3077,11 @@
         const outcome = getGenericOutcome(matchId);
         refreshGenericMatches();
         showStatus(
-          wasFinalized
-            ? `${outcome.winner} finalized`
-            : `${outcome.winner} advanced`,
+          matchControls.type === "swiss"
+            ? getSwissOutcomeLabel(matchId, outcome, wasFinalized)
+            : wasFinalized
+              ? `${outcome.winner} finalized`
+              : `${outcome.winner} advanced`,
         );
         queueAutoSave();
       }
@@ -2382,6 +3102,8 @@
           showStatus(
             `${document.querySelector(`[data-phase-target="${panelId}"]`).textContent.trim()} active`,
           );
+
+        if (panelId === "phase-swiss") scheduleSwissConnectors();
       }
 
       function readMatchState(matchControls) {
@@ -2577,36 +3299,6 @@
         }
       }
 
-      function resetState() {
-        applyState({
-          activePhase: "phase-playin",
-          lockedMatches: [],
-          lockedGenericMatches: [],
-          finalizedMatches: [],
-          finalizedGenericMatches: [],
-          matches: Object.fromEntries(
-            matches.map((match) => [
-              match.id,
-              { teams: match.teams, scores: match.scores },
-            ]),
-          ),
-          genericMatches: {},
-        });
-        Object.values(genericControls).forEach((matchControls) => {
-          matchControls.selects.forEach((select) =>
-            setOptions(select, [""], ""),
-          );
-          matchControls.scores.forEach((score) => {
-            score.value = "";
-          });
-        });
-        lockedGenericMatches.clear();
-        refreshGenericMatches();
-        setActivePhase("phase-playin", false);
-        showStatus("Reset to schedule");
-        queueAutoSave();
-      }
-
       function showStatus(message) {
         status.textContent = message;
       }
@@ -2632,8 +3324,8 @@
           queueAutoSave();
         });
       });
+      window.addEventListener("resize", scheduleSwissConnectors);
       document.getElementById("saveBtn").addEventListener("click", saveState);
-      document.getElementById("resetBtn").addEventListener("click", resetState);
     </script>
   </body>
 </html>
