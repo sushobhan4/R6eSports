@@ -91,6 +91,6 @@ const server = http.createServer(async (req, res) => {
   send(res, 405, "Method not allowed");
 });
 
-server.listen(port, "127.0.0.1", () => {
+server.listen(port, "0.0.0.0", () => {
   console.log(`R6 bracket running at http://127.0.0.1:${port}/`);
 });
