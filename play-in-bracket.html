@@ -311,10 +311,30 @@
 
       .phase-panel {
         display: none;
+        position: relative;
       }
 
       .phase-panel.active {
         display: block;
+      }
+
+      .phase-connector-svg {
+        position: absolute;
+        inset: 0;
+        z-index: 3;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+        pointer-events: none;
+      }
+
+      .phase-connector-svg path {
+        fill: none;
+        stroke: rgba(255, 62, 48, 0.64);
+        stroke-width: 2.5;
+        stroke-dasharray: 7 7;
+        vector-effect: non-scaling-stroke;
+        filter: drop-shadow(0 0 6px rgba(255, 62, 48, 0.2));
       }
 
       .phase-summary {
@@ -617,8 +637,12 @@
       }
 
       .swiss-match .slot {
-        grid-template-columns: 58px minmax(0, 1fr) 36px;
+        grid-template-columns: minmax(0, 1fr) 36px;
         min-height: 38px;
+      }
+
+      .swiss-match .match-body {
+        grid-template-columns: 58px minmax(0, 1fr);
       }
 
       .swiss-match .time {
@@ -862,13 +886,23 @@
 
       .bracket {
         display: grid;
-        grid-template-columns: 300px 96px 300px 96px 300px;
+        grid-template-columns:
+          minmax(300px, 1fr)
+          minmax(76px, 0.28fr)
+          minmax(300px, 1fr)
+          minmax(76px, 0.28fr)
+          minmax(300px, 1fr);
         align-items: center;
         gap: 0;
         min-width: 1092px;
+        width: 100%;
+        margin-inline: auto;
+        position: relative;
+        z-index: 2;
       }
 
       .bracket-wrap {
+        position: relative;
         overflow-x: auto;
         padding: 14px;
         margin: 0 -14px 18px;
@@ -883,6 +917,25 @@
           ),
           rgba(4, 10, 14, 0.34);
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        isolation: isolate;
+      }
+
+      .bracket-connector-svg {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+        pointer-events: none;
+      }
+
+      .bracket-connector-svg path {
+        fill: none;
+        stroke: rgba(222, 240, 242, 0.62);
+        stroke-width: 3;
+        vector-effect: non-scaling-stroke;
+        filter: drop-shadow(0 0 7px rgba(103, 214, 239, 0.22));
       }
 
       .round {
@@ -985,7 +1038,7 @@
       }
 
       .match.display-only .slot {
-        grid-template-columns: 54px minmax(0, 1fr);
+        grid-template-columns: minmax(0, 1fr);
       }
 
       .match.display-only .score,
@@ -993,9 +1046,14 @@
         display: none;
       }
 
+      .match-body {
+        display: grid;
+        grid-template-columns: 54px minmax(0, 1fr);
+      }
+
       .slot {
         display: grid;
-        grid-template-columns: 54px minmax(0, 1fr) 48px;
+        grid-template-columns: minmax(0, 1fr) 48px;
         min-height: 56px;
         border-bottom: 1px solid rgba(255, 255, 255, 0.09);
       }
@@ -1023,6 +1081,7 @@
       .time {
         display: grid;
         place-items: center;
+        grid-row: 1 / span 2;
         padding: 6px;
         background: linear-gradient(
           180deg,
@@ -1036,12 +1095,6 @@
           sans-serif;
         line-height: 1.15;
         text-transform: uppercase;
-      }
-
-      .time.time-spacer {
-        color: transparent;
-        background: rgba(4, 10, 15, 0.22);
-        text-shadow: none;
       }
 
       .team-cell {
@@ -1264,12 +1317,12 @@
         position: relative;
         height: 100%;
         min-height: 120px;
-        filter: drop-shadow(0 0 7px rgba(103, 214, 239, 0.25));
+        filter: none;
       }
 
       .connector::before,
       .connector::after {
-        content: "";
+        content: none;
         position: absolute;
         background: linear-gradient(90deg, var(--cyan), var(--line));
       }
@@ -1317,9 +1370,17 @@
 
       .round-labels {
         display: grid;
-        grid-template-columns: 300px 96px 300px 96px 300px;
+        grid-template-columns:
+          minmax(300px, 1fr)
+          minmax(76px, 0.28fr)
+          minmax(300px, 1fr)
+          minmax(76px, 0.28fr)
+          minmax(300px, 1fr);
         min-width: 1092px;
+        width: 100%;
         margin: 4px 0 12px;
+        position: relative;
+        z-index: 2;
         color: #081116;
         font-size: 12px;
         font-weight: 900;
@@ -1558,20 +1619,6 @@
               <span>May 15 - May 17 | Single Elimination</span>
             </div>
 
-            <div class="phase-summary">
-              <div class="summary-card">
-                <strong>Quarter Finals</strong><span>8 Swiss qualifiers.</span>
-              </div>
-              <div class="summary-card">
-                <strong>Semi Finals</strong
-                ><span>Quarter-final winners only.</span>
-              </div>
-              <div class="summary-card">
-                <strong>Final</strong
-                ><span>Two semi-final winners decide the champion.</span>
-              </div>
-            </div>
-
             <div class="bracket-wrap">
               <div class="round-labels" aria-hidden="true">
                 <span>Quarter Finals</span>
@@ -1596,36 +1643,37 @@
 
     <template id="matchTemplate">
       <article class="match">
-        <div class="slot">
+        <div class="match-body">
           <div class="time"></div>
-          <div class="team-cell">
-            <span class="badge"></span>
-            <select></select>
+          <div class="slot">
+            <div class="team-cell">
+              <span class="badge"></span>
+              <select></select>
+            </div>
+            <div class="score">
+              <input
+                type="number"
+                min="0"
+                max="99"
+                inputmode="numeric"
+                aria-label="Team score"
+              />
+            </div>
           </div>
-          <div class="score">
-            <input
-              type="number"
-              min="0"
-              max="99"
-              inputmode="numeric"
-              aria-label="Team score"
-            />
-          </div>
-        </div>
-        <div class="slot">
-          <div class="time"></div>
-          <div class="team-cell">
-            <span class="badge"></span>
-            <select></select>
-          </div>
-          <div class="score">
-            <input
-              type="number"
-              min="0"
-              max="99"
-              inputmode="numeric"
-              aria-label="Team score"
-            />
+          <div class="slot">
+            <div class="team-cell">
+              <span class="badge"></span>
+              <select></select>
+            </div>
+            <div class="score">
+              <input
+                type="number"
+                min="0"
+                max="99"
+                inputmode="numeric"
+                aria-label="Team score"
+              />
+            </div>
           </div>
         </div>
         <div class="match-actions">
@@ -2042,6 +2090,32 @@
         psf2: [{ from: "pqf3" }, { from: "pqf4" }],
         pf1: [{ from: "psf1" }, { from: "psf2" }],
       };
+      const bracketConnectorPairs = [
+        { from: "uqf1", to: "usf1" },
+        { from: "uqf2", to: "usf1" },
+        { from: "uqf3", to: "usf2" },
+        { from: "uqf4", to: "usf2" },
+        { from: "usf1", to: "uf1" },
+        { from: "usf2", to: "uf1" },
+        { from: "lqf1", to: "lsf1" },
+        { from: "lqf2", to: "lsf2" },
+        { from: "lsf1", to: "lf1" },
+        { from: "lsf2", to: "lf1" },
+        { from: "pqf1", to: "psf1" },
+        { from: "pqf2", to: "psf1" },
+        { from: "pqf3", to: "psf2" },
+        { from: "pqf4", to: "psf2" },
+        { from: "psf1", to: "pf1" },
+        { from: "psf2", to: "pf1" },
+      ];
+      const phaseConnectorPairs = [
+        { phase: "phase-playin", from: "uqf1", to: "lqf1" },
+        { phase: "phase-playin", from: "uqf2", to: "lqf1" },
+        { phase: "phase-playin", from: "uqf3", to: "lqf2" },
+        { phase: "phase-playin", from: "uqf4", to: "lqf2" },
+        { phase: "phase-playin", from: "usf2", to: "lsf1" },
+        { phase: "phase-playin", from: "usf1", to: "lsf2" },
+      ];
       const upperQuarterIds = ["uqf1", "uqf2", "uqf3", "uqf4"];
       const middleStageIds = ["usf1", "usf2", "lqf1", "lqf2"];
       const slotSources = {
@@ -2266,17 +2340,14 @@
         const node = template.content.firstElementChild.cloneNode(true);
         node.dataset.match = match.id;
         node.classList.toggle("display-only", displayOnlyMatches.has(match.id));
+        node.querySelector(".time").textContent = renderTime(match.time);
 
         const slots = node.querySelectorAll(".slot");
         slots.forEach((slot, index) => {
-          const time = slot.querySelector(".time");
           const select = slot.querySelector("select");
           const score = slot.querySelector("input");
           const badge = slot.querySelector(".badge");
 
-          time.textContent = index === 0 ? renderTime(match.time) : "";
-          time.classList.toggle("time-spacer", index !== 0);
-          if (index !== 0) time.setAttribute("aria-hidden", "true");
           select.dataset.match = match.id;
           select.dataset.slot = String(index);
           select.setAttribute("aria-label", `${match.id} team ${index + 1}`);
@@ -2473,6 +2544,7 @@
         });
 
         refreshSwissTeamPool();
+        scheduleBracketConnectors();
       }
 
       function lockWinner(matchId) {
@@ -2736,17 +2808,14 @@
         genericMatchTimes[match.id] = match.time;
 
         if (type === "swiss") node.classList.add("swiss-match");
+        node.querySelector(".time").textContent = renderTime(match.time);
 
         const slots = node.querySelectorAll(".slot");
         slots.forEach((slot, index) => {
-          const time = slot.querySelector(".time");
           const select = slot.querySelector("select");
           const score = slot.querySelector("input");
           const badge = slot.querySelector(".badge");
 
-          time.textContent = index === 0 ? renderTime(match.time) : "";
-          time.classList.toggle("time-spacer", index !== 0);
-          if (index !== 0) time.setAttribute("aria-hidden", "true");
           select.dataset.match = match.id;
           select.dataset.slot = String(index);
           select.setAttribute("aria-label", `${match.id} team ${index + 1}`);
@@ -2885,6 +2954,117 @@
         requestAnimationFrame(drawSwissConnectors);
       }
 
+      function ensureBracketConnectorSvg(wrap) {
+        let svg = wrap.querySelector(".bracket-connector-svg");
+        if (svg) return svg;
+
+        svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.classList.add("bracket-connector-svg");
+        svg.setAttribute("aria-hidden", "true");
+        wrap.prepend(svg);
+        return svg;
+      }
+
+      function drawBracketConnectors() {
+        document.querySelectorAll(".bracket-wrap").forEach((wrap) => {
+          const svg = ensureBracketConnectorSvg(wrap);
+          const wrapRect = wrap.getBoundingClientRect();
+          svg.setAttribute(
+            "viewBox",
+            `0 0 ${wrap.scrollWidth} ${wrap.scrollHeight}`,
+          );
+          svg.style.width = `${wrap.scrollWidth}px`;
+          svg.style.height = `${wrap.scrollHeight}px`;
+          svg.replaceChildren();
+
+          bracketConnectorPairs.forEach(({ from, to }) => {
+            const source = wrap.querySelector(`[data-match="${from}"]`);
+            const target = wrap.querySelector(`[data-match="${to}"]`);
+            if (!source || !target) return;
+
+            const sourceRect = source.getBoundingClientRect();
+            const targetRect = target.getBoundingClientRect();
+            const sx = sourceRect.right - wrapRect.left + wrap.scrollLeft;
+            const sy =
+              sourceRect.top + sourceRect.height / 2 - wrapRect.top + wrap.scrollTop;
+            const tx = targetRect.left - wrapRect.left + wrap.scrollLeft;
+            const ty =
+              targetRect.top + targetRect.height / 2 - wrapRect.top + wrap.scrollTop;
+            const midX = sx + (tx - sx) * 0.5;
+
+            const path = document.createElementNS(
+              "http://www.w3.org/2000/svg",
+              "path",
+            );
+            path.setAttribute(
+              "d",
+              `M ${sx} ${sy} C ${midX} ${sy}, ${midX} ${ty}, ${tx} ${ty}`,
+            );
+            svg.appendChild(path);
+          });
+        });
+      }
+
+      function ensurePhaseConnectorSvg(panel) {
+        let svg = panel.querySelector(":scope > .phase-connector-svg");
+        if (svg) return svg;
+
+        svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.classList.add("phase-connector-svg");
+        svg.setAttribute("aria-hidden", "true");
+        panel.prepend(svg);
+        return svg;
+      }
+
+      function drawPhaseConnectors() {
+        document.querySelectorAll(".phase-panel.active").forEach((panel) => {
+          const svg = ensurePhaseConnectorSvg(panel);
+          const panelRect = panel.getBoundingClientRect();
+          svg.setAttribute(
+            "viewBox",
+            `0 0 ${panel.scrollWidth} ${panel.scrollHeight}`,
+          );
+          svg.style.width = `${panel.scrollWidth}px`;
+          svg.style.height = `${panel.scrollHeight}px`;
+          svg.replaceChildren();
+
+          phaseConnectorPairs
+            .filter(({ phase }) => phase === panel.id)
+            .forEach(({ from, to }) => {
+              const source = panel.querySelector(`[data-match="${from}"]`);
+              const target = panel.querySelector(`[data-match="${to}"]`);
+              if (!source || !target) return;
+
+              const sourceRect = source.getBoundingClientRect();
+              const targetRect = target.getBoundingClientRect();
+              const sx =
+                sourceRect.left + sourceRect.width / 2 - panelRect.left;
+              const sy = sourceRect.bottom - panelRect.top;
+              const tx =
+                targetRect.left + targetRect.width / 2 - panelRect.left;
+              const ty = targetRect.top - panelRect.top;
+              const midY = sy + (ty - sy) * 0.5;
+
+              const path = document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "path",
+              );
+              path.setAttribute(
+                "d",
+                `M ${sx} ${sy} C ${sx} ${midY}, ${tx} ${midY}, ${tx} ${ty}`,
+              );
+              svg.appendChild(path);
+            });
+        });
+      }
+
+      function scheduleBracketConnectors() {
+        requestAnimationFrame(() => {
+          drawBracketConnectors();
+          drawPhaseConnectors();
+        });
+      }
+
       function renderSwissPhase() {
         const root = document.getElementById("swissRounds");
         const columns = [...root.querySelectorAll(".swiss-column")];
@@ -2956,6 +3136,7 @@
 
         refreshSwissResults();
         scheduleSwissConnectors();
+        scheduleBracketConnectors();
       }
 
       function renderPlayoffs() {
@@ -3266,6 +3447,7 @@
           );
 
         if (panelId === "phase-swiss") scheduleSwissConnectors();
+        scheduleBracketConnectors();
       }
 
       function readMatchState(matchControls) {
@@ -3453,6 +3635,7 @@
       renderSwissPhase();
       renderPlayoffs();
       refreshBracket();
+      scheduleBracketConnectors();
       loadState();
 
       phaseTabs.forEach((tab) => {
@@ -3461,7 +3644,10 @@
           queueAutoSave();
         });
       });
-      window.addEventListener("resize", scheduleSwissConnectors);
+      window.addEventListener("resize", () => {
+        scheduleSwissConnectors();
+        scheduleBracketConnectors();
+      });
       document.getElementById("saveBtn").addEventListener("click", saveState);
     </script>
   </body>
