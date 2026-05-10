@@ -90,12 +90,12 @@
 
       .app {
         min-height: 100vh;
-        padding: 22px;
+        padding: clamp(10px, 1.1vw, 22px);
       }
 
       .shell {
         position: relative;
-        width: min(1320px, 100%);
+        width: 100%;
         margin: 0 auto;
         border: 1px solid rgba(255, 255, 255, 0.18);
         border-radius: 16px;
@@ -268,6 +268,7 @@
           sans-serif;
         text-align: center;
         text-transform: uppercase;
+        overflow-wrap: anywhere;
       }
 
       .phase-tabs {
@@ -366,7 +367,8 @@
 
       .swiss-board {
         position: relative;
-        padding: 10px 12px 18px;
+        width: 100%;
+        padding: 10px clamp(10px, 0.9vw, 18px) 18px;
         border: 1px solid rgba(255, 255, 255, 0.2);
         border-radius: 14px;
         background: linear-gradient(
@@ -417,12 +419,18 @@
 
       .swiss-grid {
         --swiss-column-height: clamp(760px, 92vh, 940px);
-        --swiss-column-gap: 34px;
+        --swiss-column-gap: clamp(24px, 2vw, 56px);
         display: grid;
-        grid-template-columns: 236px 236px 260px 260px 236px;
+        grid-template-columns:
+          minmax(252px, 1fr)
+          minmax(252px, 1fr)
+          minmax(286px, 1.12fr)
+          minmax(286px, 1.12fr)
+          minmax(252px, 1fr);
         gap: var(--swiss-column-gap);
         align-items: stretch;
-        min-width: calc(1228px + (var(--swiss-column-gap) * 4));
+        width: 100%;
+        min-width: 1540px;
         position: relative;
         padding: 6px 0 2px;
         isolation: isolate;
@@ -640,6 +648,13 @@
         height: 27px;
         padding: 0 20px 0 7px;
         font-size: 9px;
+      }
+
+      .swiss-match .team-static,
+      .swiss-match select {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       .swiss-match .score {
@@ -1049,12 +1064,16 @@
       .team-static {
         display: block;
         width: 100%;
+        min-width: 0;
         font:
           900 12px Arial,
           sans-serif;
         text-transform: uppercase;
         letter-spacing: 0.2px;
         color: var(--text);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       .team-cell::after {
@@ -1123,10 +1142,14 @@
       select {
         height: 38px;
         padding: 0 36px 0 12px;
+        min-width: 0;
         cursor: pointer;
         appearance: none;
         text-transform: uppercase;
         letter-spacing: 0.2px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
         background:
           linear-gradient(
             135deg,
