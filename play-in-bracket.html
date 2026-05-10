@@ -2559,24 +2559,23 @@
             matchControls.slots[outcome.loserSlot].classList.add("loser");
             matchControls.label.textContent = timeOver
               ? `Ready to finalize: ${outcome.winner}`
-              : `Prediction: ${outcome.winner}`;
+              : `Score: ${outcome.winner}`;
             matchControls.button.textContent = timeOver
               ? "Finalize Result"
-              : "Update Prediction";
+              : "Update";
             matchControls.button.style.display = "";
           } else {
             lockedMatches.delete(match.id);
             if (!ready) {
               matchControls.label.textContent = "Waiting for previous stage";
             } else if (!timeOver) {
-              matchControls.label.textContent =
-                "Enter score to lock prediction";
+              matchControls.label.textContent = "Enter score to lock";
             } else {
               matchControls.label.textContent = "Enter score to finalize";
             }
             matchControls.button.textContent = timeOver
               ? "Finalize Result"
-              : "Lock Prediction";
+              : "Lock";
             matchControls.button.style.display = "";
           }
 
@@ -2635,7 +2634,7 @@
         showStatus(
           wasFinalized
             ? `${outcome.winner} finalized`
-            : `${outcome.winner} prediction locked`,
+            : `${outcome.winner} score locked`,
         );
         queueAutoSave();
       }
@@ -3415,10 +3414,10 @@
                 : `Winner: ${outcome.winner}`;
             matchControls.label.textContent = timeOver
               ? `Ready to finalize: ${baseLabel}`
-              : `Prediction: ${baseLabel}`;
+              : `Score: ${baseLabel}`;
             matchControls.button.textContent = timeOver
               ? "Finalize Result"
-              : "Update Prediction";
+              : "Update";
             matchControls.button.style.display = "";
           } else {
             lockedGenericMatches.delete(matchId);
@@ -3428,14 +3427,13 @@
                   ? "Waiting for feeder record"
                   : "Waiting for qualified teams";
             } else if (!timeOver) {
-              matchControls.label.textContent =
-                "Enter score to lock prediction";
+              matchControls.label.textContent = "Enter score to lock";
             } else {
               matchControls.label.textContent = "Enter score to finalize";
             }
             matchControls.button.textContent = timeOver
               ? "Finalize Result"
-              : "Lock Prediction";
+              : "Lock";
             matchControls.button.style.display = "";
           }
 
@@ -3526,8 +3524,8 @@
               ? getSwissOutcomeLabel(matchId, outcome, true)
               : `${outcome.winner} finalized`
             : matchControls.type === "swiss"
-              ? `Prediction locked: ${getSwissOutcomeLabel(matchId, outcome)}`
-              : `${outcome.winner} prediction locked`,
+              ? `Score locked: ${getSwissOutcomeLabel(matchId, outcome)}`
+              : `${outcome.winner} score locked`,
         );
         queueAutoSave();
       }
