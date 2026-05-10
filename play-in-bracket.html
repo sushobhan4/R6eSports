@@ -404,7 +404,7 @@
         box-shadow:
           inset 0 1px 0 rgba(255, 255, 255, 0.12),
           0 20px 40px rgba(0, 0, 0, 0.45);
-        overflow-x: hidden;
+        overflow-x: auto;
       }
 
       .swiss-board::before {
@@ -449,7 +449,7 @@
         gap: var(--swiss-column-gap);
         align-items: stretch;
         width: 100%;
-        min-width: 0;
+        min-width: 1060px;
         position: relative;
         padding: 6px 0 2px;
         isolation: isolate;
@@ -623,7 +623,7 @@
       .match.swiss-match.pending:hover,
       .match.swiss-match.pending:focus-within {
         z-index: 10;
-        transform: scale(1.12);
+        transform: scale(1.2);
         border-color: rgba(255, 255, 255, 0.2);
         box-shadow:
           inset 0 1px 0 rgba(255, 255, 255, 0.08),
@@ -893,7 +893,7 @@
           minmax(0, 1fr);
         align-items: center;
         gap: 0;
-        min-width: 0;
+        min-width: 920px;
         width: 100%;
         margin-inline: auto;
         position: relative;
@@ -902,7 +902,7 @@
 
       .bracket-wrap {
         position: relative;
-        overflow-x: hidden;
+        overflow-x: auto;
         padding: 14px;
         margin: 0 -14px 18px;
         border-radius: 12px;
@@ -1375,7 +1375,7 @@
           minmax(0, 1fr)
           minmax(40px, 0.22fr)
           minmax(0, 1fr);
-        min-width: 0;
+        min-width: 920px;
         width: 100%;
         margin: 4px 0 12px;
         position: relative;
@@ -1893,7 +1893,7 @@
           status: "advance",
           record: "2-0",
           stageLabel: "Winners Advance",
-          format: "Best of 1",
+          format: "Best of 3",
           matches: 2,
           times: ["Tue 12 May 01:15", "Tue 12 May 01:15"],
           prerequisites: [1],
@@ -2475,6 +2475,7 @@
           const matchControls = controls[match.id];
           const ready = isMatchReady(match.id);
           const isFinal = finalizedMatches.has(match.id);
+          const timeOver = isMatchTimeOver(match.time);
 
           matchControls.node.classList.toggle("pending", !ready);
           matchControls.node.classList.toggle(
@@ -2531,15 +2532,20 @@
             matchControls.button.style.display = "";
           } else {
             lockedMatches.delete(match.id);
-            matchControls.label.textContent = ready
-              ? "Enter score to lock"
-              : "Waiting for previous stage";
+            if (!ready) {
+              matchControls.label.textContent = "Waiting for previous stage";
+            } else if (!timeOver) {
+              matchControls.label.textContent =
+                "Scheduled: lock after match time";
+            } else {
+              matchControls.label.textContent = "Enter score to lock";
+            }
             matchControls.button.textContent = "Lock Winner";
             matchControls.button.style.display = "";
           }
 
           matchControls.button.disabled =
-            !ready || displayOnlyMatches.has(match.id);
+            !ready || displayOnlyMatches.has(match.id) || !timeOver;
         });
 
         refreshSwissTeamPool();
@@ -2560,6 +2566,11 @@
 
         if (!isMatchReady(matchId)) {
           showStatus("Previous stage must be completed first");
+          return;
+        }
+
+        if (!isMatchTimeOver(matchById[matchId]?.time)) {
+          showStatus("Match time has not passed yet");
           return;
         }
 
@@ -2754,17 +2765,7 @@
       }
 
       function getSwissAvailableTeamsForSlot(roundIndex, matchId, slotIndex) {
-        const taken = getTakenGenericTeams(
-          (id, matchControls) =>
-            matchControls.type === "swiss" &&
-            getSwissRoundIndex(id) === roundIndex,
-          matchId,
-          slotIndex,
-        );
-
-        return getSwissAvailableTeamsForRound(roundIndex).filter(
-          (team) => !taken.has(team),
-        );
+        return getSwissAvailableTeamsForRound(roundIndex);
       }
 
       function getPlayoffAvailableTeamsForSlot(matchId, slotIndex) {
@@ -3281,6 +3282,7 @@
           finalizeGenericMatchIfOver(matchId);
           const ready = isGenericMatchReady(matchId);
           const isFinal = finalizedGenericMatches.has(matchId);
+          const timeOver = isMatchTimeOver(genericMatchTimes[matchId]);
           matchControls.node.classList.toggle("pending", !ready);
           matchControls.node.classList.toggle(
             "locked",
@@ -3334,16 +3336,22 @@
             matchControls.button.style.display = "";
           } else {
             lockedGenericMatches.delete(matchId);
-            matchControls.label.textContent = ready
-              ? "Enter score to lock"
-              : matchControls.type === "swiss"
-                ? "Waiting for feeder record"
-                : "Waiting for qualified teams";
+            if (!ready) {
+              matchControls.label.textContent =
+                matchControls.type === "swiss"
+                  ? "Waiting for feeder record"
+                  : "Waiting for qualified teams";
+            } else if (!timeOver) {
+              matchControls.label.textContent =
+                "Scheduled: lock after match time";
+            } else {
+              matchControls.label.textContent = "Enter score to lock";
+            }
             matchControls.button.textContent = "Lock Winner";
             matchControls.button.style.display = "";
           }
 
-          matchControls.button.disabled = !ready;
+          matchControls.button.disabled = !ready || !timeOver;
         });
 
         refreshSwissResults();
@@ -3364,6 +3372,11 @@
 
         if (!isGenericMatchReady(matchId)) {
           showStatus("Qualified teams are needed first");
+          return;
+        }
+
+        if (!isMatchTimeOver(genericMatchTimes[matchId])) {
+          showStatus("Match time has not passed yet");
           return;
         }
 
@@ -3641,6 +3654,12 @@
       renderPlayoffs();
       refreshBracket();
       scheduleBracketConnectors();
+      document.querySelectorAll(".bracket-wrap").forEach((wrap) => {
+        wrap.addEventListener("scroll", scheduleBracketConnectors);
+      });
+      const swissBoard = document.querySelector(".swiss-board");
+      if (swissBoard)
+        swissBoard.addEventListener("scroll", scheduleSwissConnectors);
       loadState();
 
       phaseTabs.forEach((tab) => {
