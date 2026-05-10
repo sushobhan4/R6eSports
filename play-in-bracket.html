@@ -1655,7 +1655,8 @@
         FURIA: "asset/900px-FURIA_Esports_full_darkmode.png",
         "G2 Esports": "asset/1200px-G2_Esports_2020_full_darkmode.png",
         LOS: "asset/1199px-LOS_full_allmode.png",
-        "Ninjas in Pyjamas": "asset/900px-Ninjas_in_Pyjamas_2021_full_darkmode.png",
+        "Ninjas in Pyjamas":
+          "asset/900px-Ninjas_in_Pyjamas_2021_full_darkmode.png",
         "Shopify Rebellion": "asset/Shopify_Rebellion_text_2023_darkmode.png",
         "Team Falcons": "asset/1200px-Team_Falcons_2022_full_darkmode.png",
         "Twisted Minds": "asset/900px-Twisted_Minds_2023_full_darkmode.png",
@@ -1924,49 +1925,49 @@
         {
           id: "pqf1",
           group: "playoffQf",
-          time: ["Fri", "15", "May", "TBD"],
+          time: ["Fri", "15", "May", "21:30"],
           teams: ["", ""],
           scores: [null, null],
         },
         {
           id: "pqf2",
           group: "playoffQf",
-          time: ["Fri", "15", "May", "TBD"],
+          time: ["Fri", "16", "May", "00:30"],
           teams: ["", ""],
           scores: [null, null],
         },
         {
           id: "pqf3",
           group: "playoffQf",
-          time: ["Fri", "15", "May", "TBD"],
+          time: ["Fri", "16", "May", "03:30"],
           teams: ["", ""],
           scores: [null, null],
         },
         {
           id: "pqf4",
           group: "playoffQf",
-          time: ["Fri", "15", "May", "TBD"],
+          time: ["Fri", "16", "May", "06:30"],
           teams: ["", ""],
           scores: [null, null],
         },
         {
           id: "psf1",
           group: "playoffSf",
-          time: ["Sat", "16", "May", "TBD"],
+          time: ["Sat", "17", "May", "03:30"],
           teams: ["", ""],
           scores: [null, null],
         },
         {
           id: "psf2",
           group: "playoffSf",
-          time: ["Sat", "16", "May", "TBD"],
+          time: ["Sat", "17", "May", "04:00"],
           teams: ["", ""],
           scores: [null, null],
         },
         {
           id: "pf1",
           group: "playoffFinal",
-          time: ["Sun", "17", "May", "TBD"],
+          time: ["Sun", "18", "May", "04:00"],
           teams: ["", ""],
           scores: [null, null],
         },
@@ -2764,7 +2765,10 @@
         if (!root || !svg) return;
 
         const rootRect = root.getBoundingClientRect();
-        svg.setAttribute("viewBox", `0 0 ${root.scrollWidth} ${root.scrollHeight}`);
+        svg.setAttribute(
+          "viewBox",
+          `0 0 ${root.scrollWidth} ${root.scrollHeight}`,
+        );
         svg.replaceChildren();
 
         swissConnectorPairs.forEach(({ from, to, type }) => {
@@ -2784,7 +2788,10 @@
             "http://www.w3.org/2000/svg",
             "path",
           );
-          path.setAttribute("d", `M ${sx} ${sy} C ${midX} ${sy}, ${midX} ${ty}, ${tx} ${ty}`);
+          path.setAttribute(
+            "d",
+            `M ${sx} ${sy} C ${midX} ${sy}, ${midX} ${ty}, ${tx} ${ty}`,
+          );
           if (type) path.classList.add(type);
           svg.appendChild(path);
         });
@@ -2857,7 +2864,9 @@
           });
 
           if (columnIndex === 4) {
-            column.appendChild(renderSwissResultPanel("eliminated", "Eliminated"));
+            column.appendChild(
+              renderSwissResultPanel("eliminated", "Eliminated"),
+            );
           }
         });
 
@@ -2905,7 +2914,10 @@
         if (matchControls.type === "swiss") {
           const roundIndex = getSwissRoundIndex(matchId);
           const choices = ["", ...getSwissAvailableTeamsForRound(roundIndex)];
-          return addSelectedChoice(choices, matchControls.selects[slotIndex].value);
+          return addSelectedChoice(
+            choices,
+            matchControls.selects[slotIndex].value,
+          );
         }
 
         const playoffSources = playoffSourceMap[matchId];
