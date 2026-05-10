@@ -1675,7 +1675,7 @@
       };
 
       const logoBadgeBackground =
-        "radial-gradient(circle at 30% 25%, #ffffff, transparent 30%), linear-gradient(145deg, #eef2f4 0%, #b9c3c9 46%, #65727b 100%)";
+        "radial-gradient(circle at 28% 22%, rgba(255,255,255,0.22), transparent 20%), linear-gradient(145deg, #2b2b2b 0%, #111111 40%, #000000 100%)";
 
       const matches = [
         {
@@ -2624,7 +2624,11 @@
         return choices;
       }
 
-      function getTakenGenericTeams(predicate, currentMatchId, currentSlotIndex) {
+      function getTakenGenericTeams(
+        predicate,
+        currentMatchId,
+        currentSlotIndex,
+      ) {
         const taken = new Set();
 
         Object.entries(genericControls).forEach(([id, matchControls]) => {
@@ -3187,7 +3191,9 @@
           );
 
           if (duplicate) {
-            showStatus(`${duplicate} is already selected in this playoff round`);
+            showStatus(
+              `${duplicate} is already selected in this playoff round`,
+            );
             return;
           }
         }
