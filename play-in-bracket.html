@@ -417,12 +417,12 @@
 
       .swiss-grid {
         --swiss-column-height: clamp(760px, 92vh, 940px);
-        --swiss-column-gap: 18px;
+        --swiss-column-gap: 34px;
         display: grid;
-        grid-template-columns: 206px 206px 226px 226px 206px;
+        grid-template-columns: 236px 236px 260px 260px 236px;
         gap: var(--swiss-column-gap);
         align-items: stretch;
-        min-width: 1142px;
+        min-width: calc(1228px + (var(--swiss-column-gap) * 4));
         position: relative;
         padding: 6px 0 2px;
         isolation: isolate;
@@ -596,7 +596,7 @@
       .match.swiss-match.pending:hover,
       .match.swiss-match.pending:focus-within {
         z-index: 10;
-        transform: scale(1.2);
+        transform: scale(1.12);
         border-color: rgba(255, 255, 255, 0.2);
         box-shadow:
           inset 0 1px 0 rgba(255, 255, 255, 0.08),
@@ -609,21 +609,21 @@
       }
 
       .swiss-match .slot {
-        grid-template-columns: 48px minmax(0, 1fr) 28px;
-        min-height: 30px;
+        grid-template-columns: 58px minmax(0, 1fr) 36px;
+        min-height: 38px;
       }
 
       .swiss-match .time {
-        padding: 2px;
+        padding: 3px;
         font:
-          900 8px/1.08 Arial,
+          900 9px/1.08 Arial,
           sans-serif;
         background: linear-gradient(180deg, #253646, #1a2734);
       }
 
       .swiss-match .team-cell {
-        padding: 4px 5px;
-        gap: 5px;
+        padding: 5px 7px;
+        gap: 7px;
       }
 
       .swiss-match .team-cell::after {
@@ -631,24 +631,24 @@
       }
 
       .swiss-match .badge {
-        width: 20px;
-        height: 20px;
-        font-size: 8px;
+        width: 24px;
+        height: 24px;
+        font-size: 9px;
       }
 
       .swiss-match select {
-        height: 22px;
-        padding: 0 18px 0 5px;
-        font-size: 8px;
+        height: 27px;
+        padding: 0 20px 0 7px;
+        font-size: 9px;
       }
 
       .swiss-match .score {
-        padding: 4px;
+        padding: 5px;
         background: rgba(255, 255, 255, 0.06);
       }
 
       .swiss-match input[type="number"] {
-        height: 22px;
+        height: 27px;
         font-size: 12px;
       }
 
@@ -1023,6 +1023,12 @@
         text-transform: uppercase;
       }
 
+      .time.time-spacer {
+        color: transparent;
+        background: rgba(4, 10, 15, 0.22);
+        text-shadow: none;
+      }
+
       .team-cell {
         position: relative;
         display: flex;
@@ -1080,7 +1086,9 @@
         border-radius: 50%;
         flex: 0 0 auto;
         color: #07151b;
-        background: rgba(216, 221, 224, 0.92);
+        background:
+          radial-gradient(circle at 30% 25%, #ffffff, transparent 30%),
+          linear-gradient(145deg, #eef2f4 0%, #b9c3c9 46%, #65727b 100%);
         font-family: Arial, sans-serif;
         font-weight: 800;
         font-size: 11px;
@@ -1608,7 +1616,7 @@
       const participatingTeams = [
         "All Gamers",
         "CAG OSAKA",
-        "DarkZero",
+        "Dark Zero",
         "Daystar",
         "Edward Gaming",
         "ENTERPRISE Esports",
@@ -1645,7 +1653,7 @@
       const teamLogos = {
         "All Gamers": "asset/All_Gamers.png",
         "CAG OSAKA": "asset/CAG_Osaka.png",
-        DarkZero: "asset/DarkZero.png",
+        "Dark Zero": "asset/DarkZero.png",
         Daystar: "asset/Daystar.png",
         "Edward Gaming": "asset/900px-EDward_Gaming_2017_darkmode.png",
         "ENTERPRISE Esports": "asset/900px-ENTERPRISE_Esports_2023_allmode.png",
@@ -1666,28 +1674,8 @@
         "Wolves Esports": "asset/900px-Wolves_Esports_allmode.png",
       };
 
-      const teamLogoBackgrounds = {
-        "All Gamers": "#101820",
-        "CAG OSAKA": "#f3f5f6",
-        DarkZero: "#f3f5f6",
-        Daystar: "#101820",
-        "Edward Gaming": "#101820",
-        "ENTERPRISE Esports": "#101820",
-        "FaZe Clan": "#101820",
-        "Five Fears": "#101820",
-        "Four Angry Men": "#101820",
-        FURIA: "#101820",
-        "G2 Esports": "#f3f5f6",
-        LOS: "#f3f5f6",
-        "Ninjas in Pyjamas": "#101820",
-        "Shopify Rebellion": "#101820",
-        "Team Falcons": "#101820",
-        "Twisted Minds": "#101820",
-        "Virtus.Pro": "#f3f5f6",
-        "Weibo Gaming": "#f3f5f6",
-        "Wildcard Gaming": "#101820",
-        "Wolves Esports": "#101820",
-      };
+      const logoBadgeBackground =
+        "radial-gradient(circle at 30% 25%, #ffffff, transparent 30%), linear-gradient(145deg, #eef2f4 0%, #b9c3c9 46%, #65727b 100%)";
 
       const matches = [
         {
@@ -2197,14 +2185,14 @@
 
         if (!teamName || !teamLogos[teamName]) {
           badge.textContent = teamInitials(teamName);
-          badge.style.background = "#d6dde0";
+          badge.style.background = logoBadgeBackground;
           return;
         }
 
         const img = document.createElement("img");
         img.src = teamLogos[teamName];
         img.alt = `${teamName} logo`;
-        badge.style.background = teamLogoBackgrounds[teamName] || "#f3f5f6";
+        badge.style.background = logoBadgeBackground;
         badge.appendChild(img);
       }
 
@@ -2263,7 +2251,9 @@
           const score = slot.querySelector("input");
           const badge = slot.querySelector(".badge");
 
-          time.textContent = renderTime(match.time);
+          time.textContent = index === 0 ? renderTime(match.time) : "";
+          time.classList.toggle("time-spacer", index !== 0);
+          if (index !== 0) time.setAttribute("aria-hidden", "true");
           select.dataset.match = match.id;
           select.dataset.slot = String(index);
           select.setAttribute("aria-label", `${match.id} team ${index + 1}`);
@@ -2484,6 +2474,11 @@
           return;
         }
 
+        if (selectedTeams[0] === selectedTeams[1]) {
+          showStatus("A team cannot play itself");
+          return;
+        }
+
         if (
           matchControls.scores.some((score) => score.value === "") ||
           scores.some((score) => Number.isNaN(score))
@@ -2629,6 +2624,65 @@
         return choices;
       }
 
+      function getTakenGenericTeams(predicate, currentMatchId, currentSlotIndex) {
+        const taken = new Set();
+
+        Object.entries(genericControls).forEach(([id, matchControls]) => {
+          if (!predicate(id, matchControls)) return;
+
+          matchControls.selects.forEach((select, index) => {
+            if (id === currentMatchId && index === currentSlotIndex) return;
+            if (select.value) taken.add(select.value);
+          });
+        });
+
+        return taken;
+      }
+
+      function getDuplicateGenericSelection(predicate) {
+        const seen = new Set();
+
+        for (const [id, matchControls] of Object.entries(genericControls)) {
+          if (!predicate(id, matchControls)) continue;
+
+          for (const select of matchControls.selects) {
+            if (!select.value) continue;
+            if (seen.has(select.value)) return select.value;
+            seen.add(select.value);
+          }
+        }
+
+        return "";
+      }
+
+      function getSwissAvailableTeamsForSlot(roundIndex, matchId, slotIndex) {
+        const taken = getTakenGenericTeams(
+          (id, matchControls) =>
+            matchControls.type === "swiss" &&
+            getSwissRoundIndex(id) === roundIndex,
+          matchId,
+          slotIndex,
+        );
+
+        return getSwissAvailableTeamsForRound(roundIndex).filter(
+          (team) => !taken.has(team),
+        );
+      }
+
+      function getPlayoffAvailableTeamsForSlot(matchId, slotIndex) {
+        const matchControls = genericControls[matchId];
+        const taken = getTakenGenericTeams(
+          (id, controls) =>
+            controls.type === "playoff" &&
+            controls.group === matchControls.group &&
+            !playoffSourceMap[id],
+          matchId,
+          slotIndex,
+        );
+
+        return getPlayoffQualifierPool().filter((team) => !taken.has(team));
+      }
+
       function getSwissOutcomeLabel(matchId, outcome, isFinal = false) {
         const prefix = isFinal ? "Finalized" : "";
         if (
@@ -2663,7 +2717,9 @@
           const score = slot.querySelector("input");
           const badge = slot.querySelector(".badge");
 
-          time.textContent = renderTime(match.time);
+          time.textContent = index === 0 ? renderTime(match.time) : "";
+          time.classList.toggle("time-spacer", index !== 0);
+          if (index !== 0) time.setAttribute("aria-hidden", "true");
           select.dataset.match = match.id;
           select.dataset.slot = String(index);
           select.setAttribute("aria-label", `${match.id} team ${index + 1}`);
@@ -2693,6 +2749,7 @@
         genericControls[match.id] = {
           node,
           type,
+          group: match.group || "",
           slots: [...node.querySelectorAll(".slot")],
           selects: [...node.querySelectorAll("select")],
           scores: [...node.querySelectorAll("input")],
@@ -2913,7 +2970,10 @@
 
         if (matchControls.type === "swiss") {
           const roundIndex = getSwissRoundIndex(matchId);
-          const choices = ["", ...getSwissAvailableTeamsForRound(roundIndex)];
+          const choices = [
+            "",
+            ...getSwissAvailableTeamsForSlot(roundIndex, matchId, slotIndex),
+          ];
           return addSelectedChoice(
             choices,
             matchControls.selects[slotIndex].value,
@@ -2927,7 +2987,14 @@
           return team ? ["", team] : [""];
         }
 
-        return ["", ...getPlayoffQualifierPool()];
+        const choices = [
+          "",
+          ...getPlayoffAvailableTeamsForSlot(matchId, slotIndex),
+        ];
+        return addSelectedChoice(
+          choices,
+          matchControls.selects[slotIndex].value,
+        );
       }
 
       function isGenericMatchReady(matchId) {
@@ -3090,6 +3157,39 @@
         if (!selectedTeams[0] || !selectedTeams[1]) {
           showStatus("Select both teams before locking winner");
           return;
+        }
+
+        if (selectedTeams[0] === selectedTeams[1]) {
+          showStatus("A team cannot play itself");
+          return;
+        }
+
+        if (matchControls.type === "swiss") {
+          const roundIndex = getSwissRoundIndex(matchId);
+          const duplicate = getDuplicateGenericSelection(
+            (id, controls) =>
+              controls.type === "swiss" &&
+              getSwissRoundIndex(id) === roundIndex,
+          );
+
+          if (duplicate) {
+            showStatus(`${duplicate} is already selected in this Swiss round`);
+            return;
+          }
+        }
+
+        if (matchControls.type === "playoff" && !playoffSourceMap[matchId]) {
+          const duplicate = getDuplicateGenericSelection(
+            (id, controls) =>
+              controls.type === "playoff" &&
+              controls.group === matchControls.group &&
+              !playoffSourceMap[id],
+          );
+
+          if (duplicate) {
+            showStatus(`${duplicate} is already selected in this playoff round`);
+            return;
+          }
         }
 
         if (
