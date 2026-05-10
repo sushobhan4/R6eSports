@@ -405,6 +405,7 @@
           inset 0 1px 0 rgba(255, 255, 255, 0.12),
           0 20px 40px rgba(0, 0, 0, 0.45);
         overflow-x: auto;
+        overflow-y: hidden;
       }
 
       .swiss-board::before {
@@ -903,8 +904,9 @@
       .bracket-wrap {
         position: relative;
         overflow-x: auto;
+        overflow-y: hidden;
         padding: 14px;
-        margin: 0 -14px 18px;
+        margin: 0 0 18px;
         border-radius: 12px;
         background:
           linear-gradient(
@@ -1971,6 +1973,12 @@
       ];
 
       const swissLayout = [[0], [1, 2], [3, 4, 5], [6, 7], [8]];
+      const swissStages = [[0], [1, 2], [3, 4, 5], [6, 7], [8]];
+      const swissStageByRound = Object.fromEntries(
+        swissStages.flatMap((stage, index) =>
+          stage.map((roundIndex) => [roundIndex, index]),
+        ),
+      );
       const swissColumnLabels = [
         "Round 1",
         "Round 2",
@@ -2161,6 +2169,27 @@
         lsf2: ["lqf2", "usf1"],
         lf1: ["lsf1", "lsf2"],
       };
+      const playInStages = [
+        ["uqf1", "uqf2", "uqf3", "uqf4"],
+        ["usf1", "usf2", "lqf1", "lqf2"],
+        ["uf1", "lsf1", "lsf2"],
+        ["lf1"],
+      ];
+      const playInStageByMatch = Object.fromEntries(
+        playInStages.flatMap((stage, index) =>
+          stage.map((matchId) => [matchId, index]),
+        ),
+      );
+      const playoffStages = [
+        ["pqf1", "pqf2", "pqf3", "pqf4"],
+        ["psf1", "psf2"],
+        ["pf1"],
+      ];
+      const playoffStageByMatch = Object.fromEntries(
+        playoffStages.flatMap((stage, index) =>
+          stage.map((matchId) => [matchId, index]),
+        ),
+      );
       const autoSaveDelay = 650;
       let autoSaveTimer;
       const monthIndexByName = {
@@ -2422,11 +2451,23 @@
         return team ? ["", team] : [""];
       }
 
+      function isPlayInStageReady(matchId) {
+        const stageIndex = playInStageByMatch[matchId];
+        if (stageIndex === undefined) return true;
+        for (let index = 0; index < stageIndex; index += 1) {
+          if (!playInStages[index].every((id) => lockedMatches.has(id))) {
+            return false;
+          }
+        }
+        return true;
+      }
+
       function isMatchReady(matchId) {
         const requiredMatches = stageRequirements[matchId] || [];
-        return requiredMatches.every((requiredId) =>
+        const feedersReady = requiredMatches.every((requiredId) =>
           lockedMatches.has(requiredId),
         );
+        return feedersReady && isPlayInStageReady(matchId);
       }
 
       function finalizeMatchIfOver(matchId) {
@@ -2471,7 +2512,6 @@
 
       function refreshBracket() {
         matches.forEach((match) => {
-          finalizeMatchIfOver(match.id);
           const matchControls = controls[match.id];
           const ready = isMatchReady(match.id);
           const isFinal = finalizedMatches.has(match.id);
@@ -2527,8 +2567,12 @@
           } else if (outcome) {
             matchControls.slots[outcome.winnerSlot].classList.add("winner");
             matchControls.slots[outcome.loserSlot].classList.add("loser");
-            matchControls.label.textContent = `Winner: ${outcome.winner}`;
-            matchControls.button.textContent = "Update Winner";
+            matchControls.label.textContent = timeOver
+              ? `Ready to finalize: ${outcome.winner}`
+              : `Prediction: ${outcome.winner}`;
+            matchControls.button.textContent = timeOver
+              ? "Finalize Result"
+              : "Update Prediction";
             matchControls.button.style.display = "";
           } else {
             lockedMatches.delete(match.id);
@@ -2536,16 +2580,18 @@
               matchControls.label.textContent = "Waiting for previous stage";
             } else if (!timeOver) {
               matchControls.label.textContent =
-                "Scheduled: lock after match time";
+                "Enter score to lock prediction";
             } else {
-              matchControls.label.textContent = "Enter score to lock";
+              matchControls.label.textContent = "Enter score to finalize";
             }
-            matchControls.button.textContent = "Lock Winner";
+            matchControls.button.textContent = timeOver
+              ? "Finalize Result"
+              : "Lock Prediction";
             matchControls.button.style.display = "";
           }
 
           matchControls.button.disabled =
-            !ready || displayOnlyMatches.has(match.id) || !timeOver;
+            !ready || displayOnlyMatches.has(match.id);
         });
 
         refreshSwissTeamPool();
@@ -2566,11 +2612,6 @@
 
         if (!isMatchReady(matchId)) {
           showStatus("Previous stage must be completed first");
-          return;
-        }
-
-        if (!isMatchTimeOver(matchById[matchId]?.time)) {
-          showStatus("Match time has not passed yet");
           return;
         }
 
@@ -2604,7 +2645,7 @@
         showStatus(
           wasFinalized
             ? `${outcome.winner} finalized`
-            : `${outcome.winner} advanced`,
+            : `${outcome.winner} prediction locked`,
         );
         queueAutoSave();
       }
@@ -2645,6 +2686,15 @@
         return Array.from({ length: round.matches }, (_, matchIndex) =>
           swissMatchId(roundIndex, matchIndex),
         );
+      }
+
+      function isSwissStageReady(roundIndex) {
+        const stageIndex = swissStageByRound[roundIndex];
+        if (stageIndex === undefined) return true;
+        for (let index = 0; index < stageIndex; index += 1) {
+          if (!swissStages[index].every(isSwissRoundComplete)) return false;
+        }
+        return true;
       }
 
       function isSwissRoundComplete(roundIndex) {
@@ -2702,6 +2752,7 @@
         const round = swissRounds[roundIndex];
         if (!round) return false;
         if (roundIndex === 0 && getSwissTeamPool().length < 16) return false;
+        if (!isSwissStageReady(roundIndex)) return false;
         if (!round.prerequisites.every(isSwissRoundComplete)) return false;
         return getSwissAvailableTeamsForRound(roundIndex).length >= 2;
       }
@@ -2765,7 +2816,17 @@
       }
 
       function getSwissAvailableTeamsForSlot(roundIndex, matchId, slotIndex) {
-        return getSwissAvailableTeamsForRound(roundIndex);
+        const taken = getTakenGenericTeams(
+          (id, matchControls) =>
+            matchControls.type === "swiss" &&
+            getSwissRoundIndex(id) === roundIndex,
+          matchId,
+          slotIndex,
+        );
+
+        return getSwissAvailableTeamsForRound(roundIndex).filter(
+          (team) => !taken.has(team),
+        );
       }
 
       function getPlayoffAvailableTeamsForSlot(matchId, slotIndex) {
@@ -3211,6 +3272,19 @@
         );
       }
 
+      function isPlayoffStageReady(matchId) {
+        const stageIndex = playoffStageByMatch[matchId];
+        if (stageIndex === undefined) return true;
+        for (let index = 0; index < stageIndex; index += 1) {
+          if (
+            !playoffStages[index].every((id) => lockedGenericMatches.has(id))
+          ) {
+            return false;
+          }
+        }
+        return true;
+      }
+
       function isGenericMatchReady(matchId) {
         const matchControls = genericControls[matchId];
 
@@ -3223,12 +3297,17 @@
 
         const playoffSources = playoffSourceMap[matchId];
         if (playoffSources) {
-          return playoffSources.every((source) =>
-            lockedGenericMatches.has(source.from),
+          return (
+            isPlayoffStageReady(matchId) &&
+            playoffSources.every((source) =>
+              lockedGenericMatches.has(source.from),
+            )
           );
         }
 
-        return getPlayoffQualifierPool().length >= 8;
+        return (
+          isPlayoffStageReady(matchId) && getPlayoffQualifierPool().length >= 8
+        );
       }
 
       function genericDependsOn(targetId, sourceId, visited = new Set()) {
@@ -3279,7 +3358,6 @@
 
       function refreshGenericMatches() {
         Object.entries(genericControls).forEach(([matchId, matchControls]) => {
-          finalizeGenericMatchIfOver(matchId);
           const ready = isGenericMatchReady(matchId);
           const isFinal = finalizedGenericMatches.has(matchId);
           const timeOver = isMatchTimeOver(genericMatchTimes[matchId]);
@@ -3328,11 +3406,16 @@
           } else if (outcome) {
             matchControls.slots[outcome.winnerSlot].classList.add("winner");
             matchControls.slots[outcome.loserSlot].classList.add("loser");
-            matchControls.label.textContent =
+            const baseLabel =
               matchControls.type === "swiss"
                 ? getSwissOutcomeLabel(matchId, outcome)
                 : `Winner: ${outcome.winner}`;
-            matchControls.button.textContent = "Update Winner";
+            matchControls.label.textContent = timeOver
+              ? `Ready to finalize: ${baseLabel}`
+              : `Prediction: ${baseLabel}`;
+            matchControls.button.textContent = timeOver
+              ? "Finalize Result"
+              : "Update Prediction";
             matchControls.button.style.display = "";
           } else {
             lockedGenericMatches.delete(matchId);
@@ -3343,15 +3426,17 @@
                   : "Waiting for qualified teams";
             } else if (!timeOver) {
               matchControls.label.textContent =
-                "Scheduled: lock after match time";
+                "Enter score to lock prediction";
             } else {
-              matchControls.label.textContent = "Enter score to lock";
+              matchControls.label.textContent = "Enter score to finalize";
             }
-            matchControls.button.textContent = "Lock Winner";
+            matchControls.button.textContent = timeOver
+              ? "Finalize Result"
+              : "Lock Prediction";
             matchControls.button.style.display = "";
           }
 
-          matchControls.button.disabled = !ready || !timeOver;
+          matchControls.button.disabled = !ready;
         });
 
         refreshSwissResults();
@@ -3372,11 +3457,6 @@
 
         if (!isGenericMatchReady(matchId)) {
           showStatus("Qualified teams are needed first");
-          return;
-        }
-
-        if (!isMatchTimeOver(genericMatchTimes[matchId])) {
-          showStatus("Match time has not passed yet");
           return;
         }
 
@@ -3438,11 +3518,13 @@
         const outcome = getGenericOutcome(matchId);
         refreshGenericMatches();
         showStatus(
-          matchControls.type === "swiss"
-            ? getSwissOutcomeLabel(matchId, outcome, wasFinalized)
-            : wasFinalized
-              ? `${outcome.winner} finalized`
-              : `${outcome.winner} advanced`,
+          wasFinalized
+            ? matchControls.type === "swiss"
+              ? getSwissOutcomeLabel(matchId, outcome, true)
+              : `${outcome.winner} finalized`
+            : matchControls.type === "swiss"
+              ? `Prediction locked: ${getSwissOutcomeLabel(matchId, outcome)}`
+              : `${outcome.winner} prediction locked`,
         );
         queueAutoSave();
       }
@@ -3560,11 +3642,6 @@
             lockedGenericMatches.add(id);
           }
         });
-
-        matches.forEach((match) => finalizeMatchIfOver(match.id));
-        Object.keys(genericControls).forEach((id) =>
-          finalizeGenericMatchIfOver(id),
-        );
 
         refreshBracket();
         refreshGenericMatches();
