@@ -337,6 +337,10 @@
         filter: drop-shadow(0 0 6px rgba(255, 62, 48, 0.2));
       }
 
+      #phase-playin .phase-connector-svg {
+        display: none;
+      }
+
       .phase-summary {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -400,7 +404,7 @@
         box-shadow:
           inset 0 1px 0 rgba(255, 255, 255, 0.12),
           0 20px 40px rgba(0, 0, 0, 0.45);
-        overflow-x: auto;
+        overflow-x: hidden;
       }
 
       .swiss-board::before {
@@ -441,16 +445,11 @@
         --swiss-column-height: clamp(760px, 92vh, 940px);
         --swiss-column-gap: clamp(24px, 2vw, 56px);
         display: grid;
-        grid-template-columns:
-          minmax(252px, 1fr)
-          minmax(252px, 1fr)
-          minmax(286px, 1.12fr)
-          minmax(286px, 1.12fr)
-          minmax(252px, 1fr);
+        grid-template-columns: repeat(5, minmax(0, 1fr));
         gap: var(--swiss-column-gap);
         align-items: stretch;
         width: 100%;
-        min-width: 1540px;
+        min-width: 0;
         position: relative;
         padding: 6px 0 2px;
         isolation: isolate;
@@ -887,14 +886,14 @@
       .bracket {
         display: grid;
         grid-template-columns:
-          minmax(300px, 1fr)
-          minmax(76px, 0.28fr)
-          minmax(300px, 1fr)
-          minmax(76px, 0.28fr)
-          minmax(300px, 1fr);
+          minmax(0, 1fr)
+          minmax(40px, 0.22fr)
+          minmax(0, 1fr)
+          minmax(40px, 0.22fr)
+          minmax(0, 1fr);
         align-items: center;
         gap: 0;
-        min-width: 1092px;
+        min-width: 0;
         width: 100%;
         margin-inline: auto;
         position: relative;
@@ -903,7 +902,7 @@
 
       .bracket-wrap {
         position: relative;
-        overflow-x: auto;
+        overflow-x: hidden;
         padding: 14px;
         margin: 0 -14px 18px;
         border-radius: 12px;
@@ -1371,12 +1370,12 @@
       .round-labels {
         display: grid;
         grid-template-columns:
-          minmax(300px, 1fr)
-          minmax(76px, 0.28fr)
-          minmax(300px, 1fr)
-          minmax(76px, 0.28fr)
-          minmax(300px, 1fr);
-        min-width: 1092px;
+          minmax(0, 1fr)
+          minmax(40px, 0.22fr)
+          minmax(0, 1fr)
+          minmax(40px, 0.22fr)
+          minmax(0, 1fr);
+        min-width: 0;
         width: 100%;
         margin: 4px 0 12px;
         position: relative;
@@ -2986,10 +2985,16 @@
             const targetRect = target.getBoundingClientRect();
             const sx = sourceRect.right - wrapRect.left + wrap.scrollLeft;
             const sy =
-              sourceRect.top + sourceRect.height / 2 - wrapRect.top + wrap.scrollTop;
+              sourceRect.top +
+              sourceRect.height / 2 -
+              wrapRect.top +
+              wrap.scrollTop;
             const tx = targetRect.left - wrapRect.left + wrap.scrollLeft;
             const ty =
-              targetRect.top + targetRect.height / 2 - wrapRect.top + wrap.scrollTop;
+              targetRect.top +
+              targetRect.height / 2 -
+              wrapRect.top +
+              wrap.scrollTop;
             const midX = sx + (tx - sx) * 0.5;
 
             const path = document.createElementNS(
