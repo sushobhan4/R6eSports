@@ -446,11 +446,11 @@
         --swiss-column-height: clamp(760px, 92vh, 940px);
         --swiss-column-gap: clamp(24px, 2vw, 56px);
         display: grid;
-        grid-template-columns: repeat(5, minmax(0, 1fr));
+        grid-template-columns: repeat(6, minmax(0, 1fr));
         gap: var(--swiss-column-gap);
         align-items: stretch;
         width: 100%;
-        min-width: 1060px;
+        min-width: 1260px;
         position: relative;
         padding: 6px 0 2px;
         isolation: isolate;
@@ -509,7 +509,8 @@
       }
 
       .swiss-column[data-swiss-column="1"],
-      .swiss-column[data-swiss-column="5"] {
+      .swiss-column[data-swiss-column="5"],
+      .swiss-column[data-swiss-column="6"] {
         justify-content: center;
       }
 
@@ -1586,6 +1587,7 @@
                 <div class="swiss-column" data-swiss-column="3"></div>
                 <div class="swiss-column" data-swiss-column="4"></div>
                 <div class="swiss-column" data-swiss-column="5"></div>
+                <div class="swiss-column" data-swiss-column="6"></div>
               </div>
             </div>
 
@@ -1971,7 +1973,7 @@
         },
       ];
 
-      const swissLayout = [[0], [1, 2], [3, 4, 5], [6, 7], [8]];
+      const swissLayout = [[0], [1, 2], [3, 4, 5], [6, 7], [8], []];
       const swissStages = [[0], [1, 2], [3, 4, 5], [6, 7], [8]];
       const swissStageByRound = Object.fromEntries(
         swissStages.flatMap((stage, index) =>
@@ -1983,7 +1985,8 @@
         "Round 2",
         "Round 3",
         "Round 4",
-        "Round 5 / Results",
+        "Round 5",
+        "Results",
       ];
 
       const playoffMatches = [
@@ -3154,7 +3157,7 @@
 
         swissLayout.forEach((roundIndexes, columnIndex) => {
           const column = columns[columnIndex] || root;
-          if (columnIndex === 4) {
+          if (columnIndex === 5) {
             column.appendChild(renderSwissResultPanel("advanced", "Advanced"));
           }
 
@@ -3200,7 +3203,7 @@
             column.appendChild(group);
           });
 
-          if (columnIndex === 4) {
+          if (columnIndex === 5) {
             column.appendChild(
               renderSwissResultPanel("eliminated", "Eliminated"),
             );
